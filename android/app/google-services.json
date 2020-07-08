@@ -1,0 +1,70 @@
+{
+  "project_info": {
+    "project_number": "741607812571",
+    "firebase_url": "https://testapp-b0eef.firebaseio.com",
+    "project_id": "testapp-b0eef",
+    "storage_bucket": "testapp-b0eef.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:741607812571:android:8c118341bd9ee3ff8d0bfe",
+        "android_client_info": {
+          "package_name": "com.habeel.studyoverflow"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "741607812571-2lk9agdupu1quss2ob642og8ncpr1i21.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfUfnIdic_ENVOAcAu69U_H7i9MxW2xfU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "741607812571-2lk9agdupu1quss2ob642og8ncpr1i21.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-9118153038397153~5910414684"
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:741607812571:android:0be87d8cb08be4f78d0bfe",
+        "android_client_info": {
+          "package_name": "com.habeel.testapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "741607812571-2lk9agdupu1quss2ob642og8ncpr1i21.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfUfnIdic_ENVOAcAu69U_H7i9MxW2xfU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "741607812571-2lk9agdupu1quss2ob642og8ncpr1i21.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
