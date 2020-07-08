@@ -16,13 +16,11 @@ class AddQuestion extends StatefulWidget {
   String uquestion;
   String uanswer;
   String usubject;
-  String ustream;
-  String usemester;
   String umarks;
   String uchapter;
   String udiagram;
-  AddQuestion({this.uyearOfrepeat, this.uquestion, this.uanswer, this.usubject,
-    this.ustream, this.usemester, this.umarks, this.uchapter, this.udiagram});
+    AddQuestion({this.uyearOfrepeat, this.uquestion, this.uanswer, this.usubject,
+    this.umarks, this.uchapter, this.udiagram});
 
   @override
   _AddQuestionState createState() => _AddQuestionState();

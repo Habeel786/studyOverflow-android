@@ -103,9 +103,12 @@ class _DescriptionState extends State<Description> {
                   ),
                   SizedBox(height: 20,),
                   //AD_HERE
-                  AdmobBanner(
-                      adUnitId: "ca-app-pub-9118153038397153/1410457549",
-                      adSize: AdmobBannerSize.FULL_BANNER),
+                  Align(
+                    alignment: Alignment.center,
+                    child: AdmobBanner(
+                        adUnitId: "ca-app-pub-9118153038397153/1410457549",
+                        adSize: AdmobBannerSize.FULL_BANNER),
+                  ),
                   SizedBox(height: 20,),
                 ],
               ),

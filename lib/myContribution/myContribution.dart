@@ -1,11 +1,10 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:studyoverflow/models/descmodel.dart';
 import 'package:studyoverflow/models/user.dart';
 import 'package:studyoverflow/myContribution/addQuestion.dart';
-import 'package:studyoverflow/services/admob_service.dart';
+import 'package:studyoverflow/screens/home/description.dart';
 import 'package:studyoverflow/services/database.dart';
 import 'package:studyoverflow/shared/loading.dart';
 
@@ -19,6 +18,13 @@ class MyContributions extends StatefulWidget {
 class _MyContributionsState extends State<MyContributions> {
   bool adFlag=false;
   Future<bool> doDelete;
+  String shortAnswer(String answer) {
+    if (answer.length > 34) {
+      return answer.substring(0, 30) + "....";
+    } else {
+      return answer;
+    }
+  }
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
@@ -36,21 +42,49 @@ class _MyContributionsState extends State<MyContributions> {
                   return ListView.builder(
                       itemCount: snapshot.data.length,
                       itemBuilder: (_, index){
-                        if((index+1)%11==0){
-                          adFlag=true;
-                        }else{
-                          adFlag=false;
-                        }
-                        return  adFlag?AdmobService().listtileWithAd(index,context,mydata[index].answer,
-                          mydata[index].question,mydata[index].chapter,mydata[index].diagram,
-                          mydata[index].yearofrepeat,mydata[index].marks,mydata[index].postedBy,
-                          mydata[index].postedOn,
-                        ):AdmobService().listtileWithoutAd(index,context,mydata[index].answer,
-                          mydata[index].question,mydata[index].chapter,mydata[index].diagram,
-                          mydata[index].yearofrepeat,mydata[index].marks,mydata[index].postedBy,
-                          mydata[index].postedOn,
+                        return Card(
+                          color: Color(0xFF2d3447),
+                          margin: EdgeInsets.fromLTRB(10,6,10,0),
+                          child: ListTile(
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>Description(answer:mydata[index].answer,
+                                question:mydata[index].question,chapter:mydata[index].chapter,diagram:mydata[index].diagram,
+                                yearofrepeat:mydata[index].yearofrepeat,marks:mydata[index].marks,postedBy:mydata[index].postedBy,
+                                postedOn:mydata[index].postedOn,
+                              )));
+                            },
+                            title: Text(mydata[index].question,style: TextStyle(color: Colors.white70),),
+                            subtitle: Text(shortAnswer(mydata[index].answer
+                                ??""),
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                            leading: Text((index+1).toString(),
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                            trailing: SizedBox(
+                              width: 100,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  IconButton(
+                                      icon: Icon(Icons.edit,color: Colors.grey,),
+                                      onPressed: (){
+                                        print(mydata[index].diagram);
+                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>AddQuestion(uanswer:mydata[index].answer,
+                                          uquestion:mydata[index].question,uchapter:mydata[index].chapter,udiagram: mydata[index].diagram,
+                                          uyearOfrepeat:mydata[index].yearofrepeat,umarks:mydata[index].marks, usubject: mydata[index].subject,
+                                        )));
+                                      }),
+                                  IconButton(
+                                      icon: Icon(Icons.delete,color: Colors.grey,),
+                                      onPressed: (){infoDialog(context, mydata[index].question, mydata[index].semester, mydata[index].diagram);})
+                                ],
+                              ),
+                            ),
+                          ),
                         );
-                      });
+                      }
+                      );
                 }
               },
             ),
@@ -69,9 +103,10 @@ Future<bool> infoDialog(context,question,semester,diagram){
       context: context,
     barrierDismissible: true,
     builder: (BuildContext context){
-        return CupertinoAlertDialog(
-          title: Text('Delete?'),
-          content: Text('Delete this item?'),
+        return AlertDialog(
+          backgroundColor: Color(0xFF2d3447),
+          title: Text('Delete?',style: TextStyle(color: Colors.grey),),
+          content: Text('Delete this item?',style: TextStyle(color: Colors.grey)),
           actions: [
             FlatButton(onPressed: (){
               Navigator.of(context).pop();

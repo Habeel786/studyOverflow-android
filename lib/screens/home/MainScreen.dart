@@ -20,6 +20,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int currentIndex=0;
+  var _pagecontroller=PageController();
   final tabs=[
     Home(),
     SelectStrSem(),
@@ -35,7 +36,15 @@ class _MainScreenState extends State<MainScreen> {
         if(snapshot.hasData){
           UserData userData = snapshot.data;
           return  Scaffold(
-            body:tabs[currentIndex] ,
+            body:PageView(
+              controller: _pagecontroller,
+              children: tabs,
+              onPageChanged: (index){
+                setState(() {
+                  currentIndex=index;
+                });
+              },
+            ) ,
             bottomNavigationBar: BottomNavyBar(
               backgroundColor: Color(0xFF2d3447),
               selectedIndex: currentIndex,
@@ -44,6 +53,7 @@ class _MainScreenState extends State<MainScreen> {
               curve: Curves.easeInBack,
               onItemSelected: (index) => setState(() {
                 currentIndex = index;
+                _pagecontroller.animateToPage(currentIndex, duration: Duration(milliseconds:400 ), curve: Curves.linear);
               }),
               items: [
                 BottomNavyBarItem(

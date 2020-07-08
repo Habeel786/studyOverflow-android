@@ -37,11 +37,8 @@ class _SubjectListState extends State<SubjectList> {
       [Color(0xffFF5B95), Color(0xffF8556D)],
       [Color(0xffD76EF5), Color(0xff8F7AFE)],
       [Color(0xff42E695), Color(0xff3BB2B8)],
-      [Color(0xff6DC8F3), Color(0xff73A1F9)],
-      [Color(0xffFFB157), Color(0xffFFA057)],
-      [Color(0xffFF5B95), Color(0xffF8556D)],
-      [Color(0xffD76EF5), Color(0xff8F7AFE)],
-      [Color(0xff42E695), Color(0xff3BB2B8)],
+      [Color(0xff56ab2f), Color(0xffa8e063)],
+      [Color(0xffeb3349), Color(0xfff45c43)],
     ];
     aspectratio = MediaQuery.of(context).size;
     if(aspectratio.toString()=='Size(480.0, 938.7)'){
@@ -72,7 +69,7 @@ class _SubjectListState extends State<SubjectList> {
                   controller: scrollController,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context,index){
-                    if(index%5==0){
+                    if(index%7==0){
                       colorindex=0;
                     }else{
                       colorindex++;

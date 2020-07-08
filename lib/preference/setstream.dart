@@ -33,7 +33,7 @@ class _SetStreamState extends State<SetStream> {
           return Scaffold(
             appBar: AppBar(
               leading: IconButton(icon: Icon(Icons.menu), onPressed: ()=>Scaffold.of(context).openDrawer()),
-              backgroundColor: Color(0xffD76EF5),
+              backgroundColor: Color(0xFF2d3447),
               elevation: 0.0,
               centerTitle: true,
               title: Text('Profile'),
