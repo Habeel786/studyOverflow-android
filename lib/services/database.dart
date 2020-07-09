@@ -125,6 +125,15 @@ Stream<SubjectThumbnail> getThumbnail(String stream, String semester){
   ChapterNames _chapterNames(DocumentSnapshot snapshot){
     return ChapterNames(chapternames:snapshot.data['chapters']);
   }
+
+//----------getting stream names---------------//
+  Stream<StreamNames> getStreamNames(String docname){
+    return Firestore.instance.collection('stream').document(docname).snapshots().map(_streamNames);
+  }
+
+  StreamNames _streamNames(DocumentSnapshot snapshot){
+    return StreamNames(streamnames:snapshot.data['streamlist']);
+  }
 }
 
 

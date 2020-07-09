@@ -2,7 +2,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:studyoverflow/Animation/FadeAnimation.dart';
 import 'package:flutter/material.dart';
+import 'package:studyoverflow/models/descmodel.dart';
 import 'package:studyoverflow/services/auth.dart';
+import 'package:studyoverflow/services/database.dart';
 import 'package:studyoverflow/shared/loading.dart';
 
 class NewRegister extends StatefulWidget {
@@ -84,7 +86,7 @@ class _NewRegisterState extends State<NewRegister> {
                                   ),
                                   child: TextFormField(
                                     style: TextStyle(color: Colors.grey),
-                                    validator: (val)=>val.isEmpty?"Enter Valid Email": null,
+                                    validator: (val)=>val.isEmpty||(!val.contains('@gmail.com'))?"Enter Valid Email": null,
                                     onChanged:(val){
                                       setState(() {
                                         email=val;
@@ -110,7 +112,7 @@ class _NewRegisterState extends State<NewRegister> {
                                         password=val;
                                       });
                                     },
-                                    validator: (val)=>val.length<6?"Password Must Be 6 Chars Long": null,
+                                    validator: (val)=>val.length<6?"Password Must Be 8 Chars Long": null,
                                     decoration: InputDecoration(
                                         labelText: "Password",
                                         labelStyle: TextStyle(color: Colors.grey),
@@ -130,7 +132,7 @@ class _NewRegisterState extends State<NewRegister> {
                                         name=val;
                                       });
                                     },
-                                    validator: (val)=>val.length<6?"Name Must Not Be Empty": null,
+                                    validator: (val)=>val.length<6?"Name Must Atleast 6 chars long": null,
                                     decoration: InputDecoration(
                                         labelText: "Name",
                                         labelStyle: TextStyle(color: Colors.grey),
@@ -139,28 +141,42 @@ class _NewRegisterState extends State<NewRegister> {
                                   ),
                                 ),
                                 Container(
-                                      padding: EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                          border: Border(bottom: BorderSide(color: Colors.grey[200]))
-                                      ),
-                                      child: DropdownButtonFormField(
-                                        dropdownColor: Color(0xFF2d3447),
-                                        style: TextStyle(color: Colors.grey),
-                                        value:_currentStream,
-                                        items: streams.map((stream){
-                                          return DropdownMenuItem(
-                                            value: stream,
-                                            child: Text("$stream"),
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      border: Border(bottom: BorderSide(color: Colors.grey[200]))
+                                  ),
+                                  child: StreamBuilder(
+                                      stream: DatabaseServices().getStreamNames('streams'),
+                                      builder: (context, snapshot) {
+                                        if(snapshot.hasData){
+                                          StreamNames streamNames = snapshot.data;
+                                          List names=streamNames.streamnames;
+                                          return DropdownButtonFormField(
+                                            dropdownColor: Color(0xFF2d3447),
+                                            style: TextStyle(color: Colors.grey),
+                                            isExpanded: true,
+                                            value: _currentStream,
+                                            items: names.map((stream){
+                                              return DropdownMenuItem(
+                                                value: stream,
+                                                child: Text("$stream"),
+                                              );
+                                            }).toList(),
+                                            onChanged: (val)=> setState(()=>_currentStream=val),
+                                            decoration: InputDecoration(
+                                                labelStyle: TextStyle(color: Colors.grey),
+                                                hintStyle: TextStyle(color: Colors.grey),
+                                                labelText: 'Stream',
+                                                border: InputBorder.none
+                                            ),
                                           );
-                                        }).toList(),
-                                        onChanged: (val)=> setState(()=>_currentStream=val),
-                                        decoration: InputDecoration(
-                                            labelText: "Stream",
-                                            labelStyle: TextStyle(color: Colors.grey),
-                                            border: InputBorder.none
-                                        ),
-                                      ),
-                                    ),
+                                        }else{
+                                          return Text('select subject first');
+                                        }
+
+                                      }
+                                  ),
+                                ),
                                 Container(
                                       padding: EdgeInsets.all(10),
                                       decoration: BoxDecoration(

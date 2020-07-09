@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class Data{
    final String question;
    final String answer;
@@ -26,4 +24,8 @@ class SubjectThumbnail{
 class ChapterNames{
    final List chapternames;
    ChapterNames({this.chapternames});
+}
+class StreamNames{
+   final List streamnames;
+   StreamNames({this.streamnames});
 }

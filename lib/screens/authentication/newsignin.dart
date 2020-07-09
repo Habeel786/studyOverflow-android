@@ -78,8 +78,8 @@ class _NewSigninState extends State<NewSignin> {
                                       border: Border(bottom: BorderSide(color: Colors.grey[200]))
                                   ),
                                   child: TextFormField(
+                                    validator: (val)=>val.isEmpty||(!val.contains('@gmail.com'))?"Enter Valid Email": null,
                                     style: TextStyle(color: Colors.grey),
-                                    validator: (val)=>val.isEmpty?"Enter Valid Email": null,
                                     onChanged:(val){
                                       setState(() {
                                         email=val;

@@ -6,6 +6,7 @@ import 'package:studyoverflow/models/user.dart';
 import 'package:studyoverflow/screens/home/tabbarview.dart';
 import 'package:studyoverflow/shared/loading.dart';
 import 'package:studyoverflow/services/database.dart';
+import 'package:studyoverflow/shared/nodatascreen.dart';
 
 
 class Home extends StatefulWidget {
@@ -45,43 +46,46 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           UserData userData = snapshot.data;
           print(userData.stream);
           print(userData.semester);
-          return Scaffold(
-              appBar: AppBar(
-                leading: IconButton(icon: Icon(Icons.menu), onPressed: ()=>Scaffold.of(context).openDrawer()),
-                backgroundColor: Color(0xFF2d3447),
-                elevation: 0.0,
-              ),
-            body: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 40,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left:10.0),
-                    child: Text(
-                      'StudyOverflow',
-                      style: TextStyle(
-                        fontSize: 27,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.grey,
-                        fontFamily: 'Montserrat',
-                        letterSpacing: 1,
-                      ),
-                    ),
-                  ),
-                     SizedBox(
-                       height: 30*heightforsmalldevices,
-                     ),
+          return userData.stream==null||userData.semester==null?
+          nothingToShow('''Please select semester and stream from 
+                            profile tab''','assets/notfound.png')
+                :Scaffold(
+                  appBar: AppBar(
+                      leading: IconButton(icon: Icon(Icons.menu), onPressed: ()=>Scaffold.of(context).openDrawer()),
+                         backgroundColor: Color(0xFF2d3447),
+                         elevation: 0.0,
+                       ),
+                    body: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: 40,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left:10.0),
+                            child: Text(
+                              'StudyOverflow',
+                              style: TextStyle(
+                                fontSize: 27,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.grey,
+                                fontFamily: 'Montserrat',
+                                letterSpacing: 1,
+                              ),
+                            ),
+                          ),
+                             SizedBox(
+                               height: 30*heightforsmalldevices,
+                             ),
 
-                     Container(
-                       height: 600,
-                        child: SubjectList(semester: userData.semester,stream: userData.stream,)
-                  ),
-                ],
-              ),
-            )
+                             Container(
+                               height: 600,
+                                child: SubjectList(semester: userData.semester,stream: userData.stream,)
+                          ),
+                        ],
+                      ),
+                    )
           );
         }else{
           return Loading();

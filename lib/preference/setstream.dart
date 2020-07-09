@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:studyoverflow/Animation/FadeAnimation.dart';
-import 'file:///C:/Users/Smart%20computer/AndroidStudioProjects/studyoverflow/lib/services/database.dart';
+import 'package:studyoverflow/models/descmodel.dart';
 import 'package:studyoverflow/models/user.dart';
+import 'package:studyoverflow/services/database.dart';
 import 'package:studyoverflow/shared/loading.dart';
 class SetStream extends StatefulWidget {
   @override
@@ -14,13 +14,9 @@ class SetStream extends StatefulWidget {
 class _SetStreamState extends State<SetStream> {
 
   final _formkey = GlobalKey<FormState>();
-  List streams=['computer engineering','BSC','Commerce','Arts','Civil Engineering'];
-  List semesters=['1','2','3','4','5','6','7','8'];
+  List semesters=['1','2','3','4','5','6'];
   String _currentStream;
   String _currentSemester;
-  SharedPreferences sharedPrefs;
-   String localsemester="";
-   String localstream="";
   String name;
 
   Widget build(BuildContext context) {
@@ -50,31 +46,43 @@ class _SetStreamState extends State<SetStream> {
                       children: <Widget>[
                         //--------------stream--------------//
                         FadeAnimation(0.5,
-
                           Container(
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              border: Border(bottom: BorderSide(color: Colors.grey[200]))
-                          ),
-                          child: DropdownButtonFormField(
-                            dropdownColor: Color(0xFF2d3447),
-                            style: TextStyle(color: Colors.grey),
-                            value:_currentStream??userData.stream,
-                            items: streams.map((stream){
-                              return DropdownMenuItem(
-                                value: stream,
-                                child: Text("$stream"),
-                              );
-                            }).toList(),
-                            onChanged: (val)=> setState(()=>_currentStream=val),
-                            decoration: InputDecoration(
-                                labelText: "Stream",
-                                labelStyle: TextStyle(color: Colors.white),
-                                hintStyle: TextStyle(color: Colors.grey),
-                                border: InputBorder.none
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                border: Border(bottom: BorderSide(color: Colors.grey[200]))
+                            ),
+                            child: StreamBuilder(
+                                stream: DatabaseServices().getStreamNames('streams'),
+                                builder: (context, snapshot) {
+                                  if(snapshot.hasData){
+                                    StreamNames streamNames = snapshot.data;
+                                    List names=streamNames.streamnames;
+                                    return DropdownButtonFormField(
+                                      dropdownColor: Color(0xFF2d3447),
+                                      style: TextStyle(color: Colors.grey),
+                                      isExpanded: true,
+                                      value: _currentStream??userData.stream,
+                                      items: names.map((stream){
+                                        return DropdownMenuItem(
+                                          value: stream,
+                                          child: Text("$stream"),
+                                        );
+                                      }).toList(),
+                                      onChanged: (val)=> setState(()=>_currentStream=val),
+                                      decoration: InputDecoration(
+                                          labelStyle: TextStyle(color: Colors.white),
+                                          hintStyle: TextStyle(color: Colors.grey),
+                                          labelText: 'Stream',
+                                          border: InputBorder.none
+                                      ),
+                                    );
+                                  }else{
+                                    return Text('select subject first');
+                                  }
+
+                                }
                             ),
                           ),
-                        ),
                         ),
                         //--------------stream--------------//
 

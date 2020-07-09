@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +5,6 @@ import 'package:studyoverflow/services/database.dart';
 import 'package:responsive_container/responsive_container.dart';
 import 'package:studyoverflow/chapter/listchapter.dart';
 import 'package:studyoverflow/models/descmodel.dart';
-import 'package:studyoverflow/shared/loading.dart';
 class SubjectList extends StatefulWidget {
   final String semester;
   final String stream;
@@ -32,6 +30,13 @@ class _SubjectListState extends State<SubjectList> {
   Widget build(BuildContext context) {
     int colorindex=0;
     List gradientcolors=[
+      [Color(0xff6DC8F3), Color(0xff73A1F9)],
+      [Color(0xffFFB157), Color(0xffFFA057)],
+      [Color(0xffFF5B95), Color(0xffF8556D)],
+      [Color(0xffD76EF5), Color(0xff8F7AFE)],
+      [Color(0xff42E695), Color(0xff3BB2B8)],
+      [Color(0xff56ab2f), Color(0xffa8e063)],
+      [Color(0xffeb3349), Color(0xfff45c43)],
       [Color(0xff6DC8F3), Color(0xff73A1F9)],
       [Color(0xffFFB157), Color(0xffFFA057)],
       [Color(0xffFF5B95), Color(0xffF8556D)],

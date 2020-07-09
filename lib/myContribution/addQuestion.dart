@@ -11,6 +11,7 @@ import 'package:studyoverflow/services/database.dart';
 import 'package:studyoverflow/services/imageuploadservice.dart';
 import 'package:studyoverflow/shared/constants.dart';
 import 'package:studyoverflow/shared/loading.dart';
+import 'package:studyoverflow/shared/nodatascreen.dart';
 class AddQuestion extends StatefulWidget {
   String uyearOfrepeat;
   String uquestion;
@@ -29,7 +30,6 @@ class AddQuestion extends StatefulWidget {
 class _AddQuestionState extends State<AddQuestion> {
   final multiSelectKey = GlobalKey<MultiSelectDropdownState>();
   List empty=[''];
-  final _auth = AuthService();
   var results;
   final _formkey = GlobalKey<FormState>();
   var menuItems = [2014, 2015, 2016, 2017, 2018, 2019,2020,2021];
@@ -39,9 +39,7 @@ class _AddQuestionState extends State<AddQuestion> {
   final List<String> courses = ['computer engineering','BSC','commerce','electronics engineering','civil engineering','electrical engineering'];
   bool loading= false;
   String isSuccessfull="";
-  String _currentStream;
   String _currentsubject;
-  String _currentSemester;
   String _currentMarks;
   String _currentchapter;
   String question;
@@ -79,7 +77,10 @@ class _AddQuestionState extends State<AddQuestion> {
         builder: (context, snapshot) {
           if(snapshot.hasData){
             UserData userData = snapshot.data;
-            return GestureDetector(
+            return userData.semester==null||userData.stream==null?
+            nothingToShow('''Please select semester and stream from 
+                            profile tab''','assets/notfound.png'):
+            GestureDetector(
               onTap: (){
                 FocusScopeNode currentFocus = FocusScope.of(context);
                 if (!currentFocus.hasPrimaryFocus) {
