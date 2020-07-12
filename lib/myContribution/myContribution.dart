@@ -7,6 +7,7 @@ import 'package:studyoverflow/myContribution/addQuestion.dart';
 import 'package:studyoverflow/screens/home/description.dart';
 import 'package:studyoverflow/services/database.dart';
 import 'package:studyoverflow/shared/loading.dart';
+import 'package:studyoverflow/shared/nodatascreen.dart';
 
 class MyContributions extends StatefulWidget {
   var _data;
@@ -16,13 +17,12 @@ class MyContributions extends StatefulWidget {
 }
 
 class _MyContributionsState extends State<MyContributions> {
-  bool adFlag=false;
   Future<bool> doDelete;
-  String shortAnswer(String answer) {
-    if (answer.length > 34) {
-      return answer.substring(0, 30) + "....";
+  String shortText(String text,int maxlength,int limit) {
+    if (text.length > maxlength) {
+      return text.substring(0, limit) + "....";
     } else {
-      return answer;
+      return text;
     }
   }
   @override
@@ -39,8 +39,9 @@ class _MyContributionsState extends State<MyContributions> {
                 if(snapshot.connectionState==ConnectionState.waiting){
                   return Loading();
                 }else{
-                  return ListView.builder(
-                      itemCount: snapshot.data.length,
+                  return mydata.isEmpty?nothingToShow('By adding questions which are not available you can also contribute in the StudyOverflow community, your name will be reflected below the question you will add.', 'assets/contribute.png')
+                      :ListView.builder(
+                      itemCount: mydata.length,
                       itemBuilder: (_, index){
                         return Card(
                           color: Color(0xFF2d3447),
@@ -54,8 +55,8 @@ class _MyContributionsState extends State<MyContributions> {
                               )));
                             },
                             title: Text(mydata[index].question,style: TextStyle(color: Colors.white70),),
-                            subtitle: Text(shortAnswer(mydata[index].answer
-                                ??""),
+                            subtitle: Text(shortText(mydata[index].answer
+                                ??"",34,30),
                               style: TextStyle(color: Colors.grey),
                             ),
                             leading: Text((index+1).toString(),
@@ -112,7 +113,7 @@ Future<bool> infoDialog(context,question,semester,diagram){
               Navigator.of(context).pop();
             }, child: Text('No')),
             FlatButton(onPressed: ()async{
-              await DatabaseServices().deleteData(question,semester,diagram);
+              DatabaseServices().deleteData(question,semester,diagram);
               Navigator.of(context).pop();
               }, child: Text('Yes')),
           ],

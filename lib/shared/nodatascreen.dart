@@ -15,13 +15,12 @@ Widget nothingToShow(String text,String imagepath){
             ),
           ),
           SizedBox(height: 40,),
-          Center(
-            child: SizedBox(
-              height: 40.0,
-              width: 300.0,
-              child: AutoSizeText(text,
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Center(
+              child:Text(text,
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 15,
                   fontFamily: "Montserrat",
                   fontWeight: FontWeight.w600,
                   color: Colors.grey,

@@ -15,6 +15,7 @@ class _SetStreamState extends State<SetStream> {
 
   final _formkey = GlobalKey<FormState>();
   List semesters=['1','2','3','4','5','6'];
+  List streams=['computer engineering','civil engineering','mechanical engineering','electronics','electrical engineering'];
   String _currentStream;
   String _currentSemester;
   String name;
@@ -51,38 +52,62 @@ class _SetStreamState extends State<SetStream> {
                             decoration: BoxDecoration(
                                 border: Border(bottom: BorderSide(color: Colors.grey[200]))
                             ),
-                            child: StreamBuilder(
-                                stream: DatabaseServices().getStreamNames('streams'),
-                                builder: (context, snapshot) {
-                                  if(snapshot.hasData){
-                                    StreamNames streamNames = snapshot.data;
-                                    List names=streamNames.streamnames;
-                                    return DropdownButtonFormField(
-                                      dropdownColor: Color(0xFF2d3447),
-                                      style: TextStyle(color: Colors.grey),
-                                      isExpanded: true,
-                                      value: _currentStream??userData.stream,
-                                      items: names.map((stream){
-                                        return DropdownMenuItem(
-                                          value: stream,
-                                          child: Text("$stream"),
-                                        );
-                                      }).toList(),
-                                      onChanged: (val)=> setState(()=>_currentStream=val),
-                                      decoration: InputDecoration(
-                                          labelStyle: TextStyle(color: Colors.white),
-                                          hintStyle: TextStyle(color: Colors.grey),
-                                          labelText: 'Stream',
-                                          border: InputBorder.none
-                                      ),
-                                    );
-                                  }else{
-                                    return Text('select subject first');
-                                  }
-
-                                }
+                            child: DropdownButtonFormField(
+                              dropdownColor: Color(0xFF2d3447),
+                              style: TextStyle(color: Colors.grey),
+                              isExpanded: true,
+                              value: _currentStream??userData.stream,
+                              items: streams.map((stream){
+                                return DropdownMenuItem(
+                                  value: stream,
+                                  child: Text("$stream"),
+                                );
+                              }).toList(),
+                              onChanged: (val)=> setState(()=>_currentStream=val),
+                              decoration: InputDecoration(
+                                  labelStyle: TextStyle(color: Colors.white),
+                                  labelText: 'Stream',
+                                  border: InputBorder.none
+                              ),
                             ),
                           ),
+//                          Container(
+//                            padding: EdgeInsets.all(10),
+//                            decoration: BoxDecoration(
+//                                border: Border(bottom: BorderSide(color: Colors.grey[200]))
+//                            ),
+//                            child: StreamBuilder(
+//                                stream: DatabaseServices().getStreamNames('streams'),
+//                                builder: (context, snapshot) {
+//                                  if(snapshot.hasData){
+//                                    StreamNames streamNames = snapshot.data;
+//                                    List names=streamNames.streamnames;
+//                                    return DropdownButtonFormField(
+//                                      dropdownColor: Color(0xFF2d3447),
+//                                      style: TextStyle(color: Colors.grey),
+//                                      isExpanded: true,
+//                                      value: _currentStream??userData.stream,
+//                                      items: names.map((stream){
+//                                        return DropdownMenuItem(
+//                                          value: stream,
+//                                          child: Text("$stream"),
+//                                        );
+//                                      }).toList(),
+//                                      onChanged: (val)=> setState(()=>_currentStream=val),
+//                                      decoration: InputDecoration(
+//                                          labelStyle: TextStyle(color: Colors.white),
+//                                          hintStyle: TextStyle(color: Colors.grey),
+//                                          labelText: 'Stream',
+//                                          border: InputBorder.none
+//                                      ),
+//                                    );
+//                                  }else{
+//                                    return Text('loading...',style: TextStyle(color: Colors.grey),);
+//                                  }
+//
+//                                }
+//                            ),
+//                          ),
                         ),
                         //--------------stream--------------//
 

@@ -10,8 +10,7 @@ class _SelectStrSemState extends State<SelectStrSem> {
   Widget build(BuildContext context) {
     return Scaffold(
       body:nothingToShow(
-          '''We Are Currently Working On This Feature
-                   It Will Be Available Soon''','assets/onboarding1.png')
+          'We Are Currently Working On This Feature It Will Be Available Soon','assets/onboarding1.png')
     );
   }
 }

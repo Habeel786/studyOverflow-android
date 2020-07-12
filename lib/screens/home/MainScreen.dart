@@ -53,7 +53,7 @@ class _MainScreenState extends State<MainScreen> {
               curve: Curves.easeInBack,
               onItemSelected: (index) => setState(() {
                 currentIndex = index;
-                _pagecontroller.animateToPage(currentIndex, duration: Duration(milliseconds:400 ), curve: Curves.linear);
+                _pagecontroller.jumpToPage(currentIndex);
               }),
               items: [
                 BottomNavyBarItem(

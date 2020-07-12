@@ -6,6 +6,7 @@ import 'package:studyoverflow/services/database.dart';
 import 'package:studyoverflow/models/descmodel.dart';
 import 'package:studyoverflow/screens/home/description.dart';
 import 'package:studyoverflow/shared/loading.dart';
+import 'package:studyoverflow/shared/nodatascreen.dart';
 
 
 class Demo extends StatefulWidget {
@@ -48,7 +49,8 @@ class _DemoState extends State<Demo> {
           if(snapshot.connectionState==ConnectionState.waiting){
             return Loading();
           }else{
-            return ListView.builder(
+            return mydata.isEmpty?nothingToShow("Data is to be added",'assets/notfound.png'):
+            ListView.builder(
                 itemCount: snapshot.data.length,
                 itemBuilder: (_, index){
                   if((index+1)%11==0){

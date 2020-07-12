@@ -71,7 +71,6 @@ class _SubjectListState extends State<SubjectList> {
                 //bug for small devices and tablets
                 child: ListView.builder(
                   itemCount: names.length,//widget.userData.length,
-                  controller: scrollController,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context,index){
                     if(index%7==0){

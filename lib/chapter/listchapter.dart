@@ -6,6 +6,7 @@ import 'package:studyoverflow/services/database.dart';
 import 'package:studyoverflow/models/descmodel.dart';
 import 'package:studyoverflow/screens/allQuestions/showdata.dart';
 import 'package:studyoverflow/shared/loading.dart';
+import 'package:studyoverflow/shared/nodatascreen.dart';
 class ChapterList extends StatefulWidget {
   final String stream;
   final String semester;
@@ -35,7 +36,8 @@ class _ChapterListState extends State<ChapterList> {
           ChapterNames chapterNames = snapshot.data;
           List names=chapterNames.chapternames;
           return Scaffold(
-            body: ListView.builder(
+            body: names.isEmpty?nothingToShow("            No data present",'assets/notfound.png'):
+            ListView.builder(
               itemCount: names.length,
               itemBuilder: (context, index) {
                 if(index%5==0){

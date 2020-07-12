@@ -1,10 +1,7 @@
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:studyoverflow/Animation/FadeAnimation.dart';
 import 'package:flutter/material.dart';
-import 'package:studyoverflow/models/descmodel.dart';
 import 'package:studyoverflow/services/auth.dart';
-import 'package:studyoverflow/services/database.dart';
 import 'package:studyoverflow/shared/loading.dart';
 
 class NewRegister extends StatefulWidget {
@@ -22,8 +19,8 @@ class _NewRegisterState extends State<NewRegister> {
   String name="";
   String _currentSemester;
   String _currentStream;
-  List streams=['computer engineering','BSC','Commerce','Arts','Civil Engineering'];
-  List semesters=['1','2','3','4','5','6','7','8'];
+  List streams=['computer engineering','civil engineering','mechanical engineering','electronics','electrical engineering'];
+  List semesters=['1','2','3','4','5','6'];
   String error="";
   bool loading= false;
   @override
@@ -140,23 +137,54 @@ class _NewRegisterState extends State<NewRegister> {
                                     ),
                                   ),
                                 ),
+//                                Container(
+//                                  padding: EdgeInsets.all(10),
+//                                  decoration: BoxDecoration(
+//                                      border: Border(bottom: BorderSide(color: Colors.grey[200]))
+//                                  ),
+//                                  child: StreamBuilder(
+//                                      stream: DatabaseServices().getStreamNames('streams'),
+//                                      builder: (context, snapshot) {
+//                                        if(snapshot.hasData){
+//                                          StreamNames streamNames = snapshot.data;
+//                                          List names=streamNames.streamnames;
+//                                          return DropdownButtonFormField(
+//                                            dropdownColor: Color(0xFF2d3447),
+//                                            style: TextStyle(color: Colors.grey),
+//                                            isExpanded: true,
+//                                            value: _currentStream,
+//                                            items: names.map((stream){
+//                                              return DropdownMenuItem(
+//                                                value: stream,
+//                                                child: Text("$stream"),
+//                                              );
+//                                            }).toList(),
+//                                            onChanged: (val)=> setState(()=>_currentStream=val),
+//                                            decoration: InputDecoration(
+//                                                labelStyle: TextStyle(color: Colors.grey),
+//                                                hintStyle: TextStyle(color: Colors.grey),
+//                                                labelText: 'Stream',
+//                                                border: InputBorder.none
+//                                            ),
+//                                          );
+//                                        }else{
+//                                          return Text('select subject first');
+//                                        }
+//
+//                                      }
+//                                  ),
+//                                ),
                                 Container(
                                   padding: EdgeInsets.all(10),
                                   decoration: BoxDecoration(
                                       border: Border(bottom: BorderSide(color: Colors.grey[200]))
                                   ),
-                                  child: StreamBuilder(
-                                      stream: DatabaseServices().getStreamNames('streams'),
-                                      builder: (context, snapshot) {
-                                        if(snapshot.hasData){
-                                          StreamNames streamNames = snapshot.data;
-                                          List names=streamNames.streamnames;
-                                          return DropdownButtonFormField(
+                                  child: DropdownButtonFormField(
                                             dropdownColor: Color(0xFF2d3447),
                                             style: TextStyle(color: Colors.grey),
                                             isExpanded: true,
                                             value: _currentStream,
-                                            items: names.map((stream){
+                                            items: streams.map((stream){
                                               return DropdownMenuItem(
                                                 value: stream,
                                                 child: Text("$stream"),
@@ -169,13 +197,7 @@ class _NewRegisterState extends State<NewRegister> {
                                                 labelText: 'Stream',
                                                 border: InputBorder.none
                                             ),
-                                          );
-                                        }else{
-                                          return Text('select subject first');
-                                        }
-
-                                      }
-                                  ),
+                                          ),
                                 ),
                                 Container(
                                       padding: EdgeInsets.all(10),
@@ -208,8 +230,6 @@ class _NewRegisterState extends State<NewRegister> {
                             children: <Widget>[
                               FadeAnimation(1.6, GestureDetector(
                                 onTap: ()async{
-                                  SharedPreferences prefs= await SharedPreferences.getInstance();
-                                  prefs.setStringList('strsem', ['--SELECT STREAM--','--SELECT SEMESTER--']);
                                   print(email);
                                   print(password);
                                   if(_formkey.currentState.validate()) {
