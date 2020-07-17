@@ -28,6 +28,7 @@ class _DemoState extends State<Demo> {
   List<Data> tempdata=[];
 
   bool isSearching=false;
+  bool notFound=false;
   var _data;
   bool adFlag=false;
   @override
@@ -50,9 +51,16 @@ class _DemoState extends State<Demo> {
             filterthedata(String value){
              setState(() {
                tempdata=mydata.where((u) =>
-               (u.question.toLowerCase().contains(value))).toList();
-             });
+               (u.question.toLowerCase().contains(value.toLowerCase()))).toList();
+             }
+             );
+             tempdata.isEmpty?notFound=true:notFound=false;
              print(tempdata);
+            }
+            if(tempdata.isEmpty){
+              filteredMydata=mydata;
+            }else{
+              filteredMydata=tempdata;
             }
             return mydata.isEmpty?nothingToShow("Data is to be added",'assets/notfound.png'):Scaffold(
               appBar: AppBar(
@@ -101,31 +109,31 @@ class _DemoState extends State<Demo> {
                 centerTitle: true,
                 backgroundColor: Color(0xffD76EF5),
               ),
-              body: DraggableScrollbar.arrows(
+              body: notFound?nothingToShow('', 'assets/searchnotfound.png'):DraggableScrollbar.arrows(
                 controller: _arrowsController,
                 child: ListView.builder(
                   controller: _arrowsController,
                     itemCount: tempdata.isEmpty?mydata.length:filteredMydata.length,
                     itemBuilder: (_, index){
-                    if(tempdata.isEmpty){
-                      filteredMydata=mydata;
-                    }else{
-                      filteredMydata=tempdata;
-                    }
                       if((index+1)%11==0){
                         adFlag=true;
                       }else{
                         adFlag=false;
                       }
+//                      return ListTile(
+//                        title: Text(filteredMydata[index].question),
+//                      );
                      return adFlag?AdmobService().listtileWithAd(index,context,filteredMydata[index].answer,
                         filteredMydata[index].question,filteredMydata[index].chapter,filteredMydata[index].diagram,
                         filteredMydata[index].yearofrepeat,filteredMydata[index].marks,filteredMydata[index].postedBy,
-                        filteredMydata[index].postedOn,
+                        filteredMydata[index].postedOn, filteredMydata[index].like,filteredMydata[index].dislike,
+                       filteredMydata[index].semester
                       ):AdmobService().listtileWithoutAd(index,context,filteredMydata[index].answer,
                         filteredMydata[index].question,filteredMydata[index].chapter,filteredMydata[index].diagram,
                         filteredMydata[index].yearofrepeat,filteredMydata[index].marks,filteredMydata[index].postedBy,
-                        filteredMydata[index].postedOn,
-                      );
+                        filteredMydata[index].postedOn,filteredMydata[index].like,filteredMydata[index].dislike,
+                         filteredMydata[index].semester
+                     );
                     }
                     ),
               ),

@@ -22,7 +22,20 @@ class AdmobService{
       return answer;
     }
   }
-  Widget listtileWithAd(index,BuildContext context,answer,question,chapter,diagram,yearofrepeat,marks,postedby,postedon){
+  Widget listtileWithAd(index,
+      BuildContext context,
+      answer,
+      question,
+      chapter,
+      diagram,
+      yearofrepeat,
+      marks,
+      postedby,
+      postedon,
+      like,
+      dislike,
+      semester
+      ){
     return Column(
       children: [
         Center(
@@ -38,7 +51,7 @@ class AdmobService{
               Navigator.push(context, MaterialPageRoute(builder: (context)=>Description(answer:answer,
                 question:question,chapter:chapter,diagram:diagram,
                 yearofrepeat:yearofrepeat,marks:marks,postedBy:postedby,
-                postedOn:postedon,
+                postedOn:postedon,like: like,dislike: dislike,semester:semester ,
               )));
             },
             title: Text(question,style: TextStyle(color: Colors.white70),),
@@ -64,7 +77,20 @@ class AdmobService{
       ],
     );
   }
-  Widget listtileWithoutAd(index,BuildContext context,answer,question,chapter,diagram,yearofrepeat,marks,postedby,postedon){
+  Widget listtileWithoutAd(index,
+      BuildContext context,
+      answer,
+      question,
+      chapter,
+      diagram,
+      yearofrepeat,
+      marks,
+      postedby,
+      postedon,
+      like,
+      dislike,
+      semester
+      ){
     return Card(
       color: Color(0xFF2d3447),
       margin: EdgeInsets.fromLTRB(10,6,10,0),
@@ -73,7 +99,7 @@ class AdmobService{
           Navigator.push(context, MaterialPageRoute(builder: (context)=>Description(answer:answer,
             question:question,chapter:chapter,diagram:diagram,
             yearofrepeat:yearofrepeat,marks:marks,postedBy:postedby,
-            postedOn:postedon,
+            postedOn:postedon,like: like,dislike: dislike,semester: semester,
           )));
         },
         title: Text(question,style: TextStyle(color: Colors.white70),),

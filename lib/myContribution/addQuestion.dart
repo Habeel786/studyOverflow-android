@@ -6,7 +6,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:studyoverflow/models/descmodel.dart';
 import 'package:studyoverflow/models/user.dart';
-import 'package:studyoverflow/services/auth.dart';
 import 'package:studyoverflow/services/database.dart';
 import 'package:studyoverflow/services/imageuploadservice.dart';
 import 'package:studyoverflow/shared/constants.dart';
@@ -20,8 +19,10 @@ class AddQuestion extends StatefulWidget {
   String umarks;
   String uchapter;
   String udiagram;
+  int ulike;
+  int udisLike;
     AddQuestion({this.uyearOfrepeat, this.uquestion, this.uanswer, this.usubject,
-    this.umarks, this.uchapter, this.udiagram});
+    this.umarks, this.uchapter, this.udiagram,this.udisLike,this.ulike});
 
   @override
   _AddQuestionState createState() => _AddQuestionState();
@@ -89,13 +90,9 @@ class _AddQuestionState extends State<AddQuestion> {
               },
               child: SingleChildScrollView(
                 physics: AlwaysScrollableScrollPhysics(),
-                padding: EdgeInsets.only(
-                    top: 20.0,
-                    left: 20,
-                    right: 20
-                ),
+                padding: EdgeInsets.only(top: 20.0),
                 child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 10,horizontal: 20),
+                  padding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
                   child: Form(
                       key: _formkey,
                       child:Column(
@@ -268,7 +265,9 @@ class _AddQuestionState extends State<AddQuestion> {
                                   currentImageURL??diagramlink??widget.udiagram,
                                   _yearOfRepeat=="[]"?widget.uyearOfrepeat:_yearOfRepeat,
                                   _currentMarks??widget.umarks,
-                                  userData.name
+                                  userData.name,
+                                  widget.ulike??0,
+                                  widget.udisLike??0,
                               );
                               print('result:${result}');
                               print("Data entered successfully");

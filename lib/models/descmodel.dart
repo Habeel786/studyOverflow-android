@@ -11,10 +11,12 @@ class Data{
    final String marks;
    final dynamic postedBy;
    final dynamic postedOn;
-
-
+   final int like;
+   final int dislike;
    Data({this.question, this.answer, this.course, this.semester, this.subject,
-       this.chapter,this.diagram,this.yearofrepeat,this.marks,this.thumbnail,this.postedBy,this.postedOn});
+       this.chapter,this.diagram,this.yearofrepeat,this.marks,this.thumbnail,this.postedBy,this.postedOn,
+   this.like,this.dislike
+   });
 }
 class SubjectThumbnail{
    final Map thumbnail;

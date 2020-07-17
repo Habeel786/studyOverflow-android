@@ -7,7 +7,21 @@ class DatabaseServices{
   DatabaseServices({this.uid});
   CollectionReference brewCollection = Firestore.instance.collection("users");
   CollectionReference brewCollectionQuestions = Firestore.instance.collection("brews");
-  Future updateUserQuestion(String question,String answer,String subject,String course,String semester,String chapter, String diagram, String yearofrepeat,String marks,String name)async {
+
+  Future updateLikes(int likes,String question,String semester)async{
+    return await brewCollectionQuestions.document(question+"-"+semester).updateData({
+      'Like':likes,
+    });
+  }
+  Future updateDisLikes(int dislikes,String question,String semester)async{
+    return await brewCollectionQuestions.document(question+"-"+semester).updateData({
+      'DisLike':dislikes,
+    });
+  }
+  Future updateUserQuestion(String question,String answer,String subject,
+      String course,String semester,String chapter,
+      String diagram, String yearofrepeat,String marks,
+      String name,int like,int disLike)async {
     return await brewCollectionQuestions.document(question+"-"+semester).setData({
       'Question': question,
       'Answer': answer,
@@ -21,6 +35,8 @@ class DatabaseServices{
       'UserID':uid,
       'PostedBy':name,
       'PostedOn':DateTime.now().toString(),
+      'Like':like,
+      'DisLike':disLike,
     });
   }
   Future updateUserData(String semester, String name, String stream)async{
@@ -77,6 +93,8 @@ class DatabaseServices{
         thumbnail: doc.data['Thumbnail']??'',
         postedBy: doc.data['PostedBy']??'',
         postedOn: doc.data['PostedOn']??'',
+        dislike: doc.data['DisLike']??0,
+        like: doc.data['Like']??0,
   );
   }).toList();
 

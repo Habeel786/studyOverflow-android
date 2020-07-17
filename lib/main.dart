@@ -17,7 +17,21 @@ class MyApp extends StatelessWidget {
     return StreamProvider<User>.value(
       value: AuthService().user,
       child: MaterialApp(
-        theme: new ThemeData(scaffoldBackgroundColor: const Color(0xFF2d3447)),
+        theme: new ThemeData(
+          primaryColor: Color(0XFFeb1555),
+         // accentColor: Color(0XFF5173A8),
+            scaffoldBackgroundColor: const Color(0xFF2d3447),
+          textTheme: TextTheme(
+            headline5: TextStyle(
+              color: Colors.grey[700],
+            ),
+            caption: TextStyle(
+              color: Colors.grey,
+            ),
+            bodyText2: TextStyle(
+                color: Colors.grey[700]),
+          ),
+        ),
         title: 'StudyOverflow',
         home:Wrapper(),
       ),

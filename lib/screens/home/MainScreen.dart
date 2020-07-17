@@ -11,6 +11,7 @@ import 'package:studyoverflow/preference/setstream.dart';
 import 'package:studyoverflow/screens/home/home.dart';
 import 'package:studyoverflow/screens/home/selectsubject.dart';
 import 'package:studyoverflow/services/auth.dart';
+import 'package:studyoverflow/shared/constants.dart';
 import 'package:studyoverflow/shared/loading.dart';
 import '../wrapper.dart';
 class MainScreen extends StatefulWidget {
@@ -156,7 +157,14 @@ class _MainScreenState extends State<MainScreen> {
                       onTap: () {
                         //debugPrint("Tapped Notifications");
                         Navigator.pop(context);
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>TermsAndConditions()));
+                        showAboutDialog(
+                          context: context,
+                          applicationVersion: '1.0.0',
+                          applicationLegalese: TandC,
+                          applicationIcon: AppIcon(),
+                          applicationName: 'StudyOverflow',
+                        );
+                        //Navigator.push(context, MaterialPageRoute(builder: (context)=>TermsAndConditions()));
                       },
                       leading: Icon(Icons.receipt,color: Colors.grey,),
                       title: Text("Terms And Condition",style: TextStyle(color: Colors.grey)),
