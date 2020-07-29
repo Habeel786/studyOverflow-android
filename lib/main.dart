@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       value: AuthService().user,
       child: MaterialApp(
         theme: new ThemeData(
-          primaryColor: Color(0XFFeb1555),
+          primaryColor: Color(0XFFD76EF5),
          // accentColor: Color(0XFF5173A8),
             scaffoldBackgroundColor: const Color(0xFF2d3447),
           textTheme: TextTheme(

@@ -223,7 +223,7 @@ class _DescriptionState extends State<Description> {
                 setState(() {});
               },
               child: Transform(
-                alignment: FractionalOffset.center,
+               // alignment: FractionalOffset.center,
                 transform: Matrix4.diagonal3(Vector3(_scale, _scale, _scale)),
                 child: CachedNetworkImage(
                   imageUrl: widget.diagram,

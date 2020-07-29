@@ -5,6 +5,7 @@ import '../models/descmodel.dart';
 class DatabaseServices{
   final uid;
   DatabaseServices({this.uid});
+  CollectionReference dataCollection = Firestore.instance.collection('data');
   CollectionReference brewCollection = Firestore.instance.collection("users");
   CollectionReference brewCollectionQuestions = Firestore.instance.collection("brews");
 
@@ -22,7 +23,9 @@ class DatabaseServices{
       String course,String semester,String chapter,
       String diagram, String yearofrepeat,String marks,
       String name,int like,int disLike)async {
-    return await brewCollectionQuestions.document(question+"-"+semester).setData({
+//    return await brewCollectionQuestions.document(question+"-"+semester).setData({
+    return await dataCollection.document(course).collection(semester).document(subject.replaceAll("/", "-")).collection(chapter.replaceAll("/", "-")).document(question.replaceAll("/", "-")+semester).setData(
+        {
       'Question': question,
       'Answer': answer,
       'Course': course,
@@ -56,16 +59,16 @@ class DatabaseServices{
     });
   }
 
-  Future getData(String semester, String stream, String subject,String chapter) async{
-    var firestore = Firestore.instance;
-    QuerySnapshot qn = await firestore.collection("brews")
-        .where('Course', isEqualTo: stream)
-        .where('Semester' , isEqualTo: semester)
-        .where("Subject",isEqualTo:subject)
-        .where('Chapter',isEqualTo:chapter )
-        .getDocuments();
-    return qn.documents;
-  }
+//  Future getData(String semester, String stream, String subject,String chapter) async{
+//    var firestore = Firestore.instance;
+//    QuerySnapshot qn = await firestore.collection("brews")
+//        .where('Course', isEqualTo: stream)
+//        .where('Semester' , isEqualTo: semester)
+//        .where("Subject",isEqualTo:subject)
+//        .where('Chapter',isEqualTo:chapter )
+//        .getDocuments();
+//    return qn.documents;
+//  }
 
   Future deleteData(String question,String semester,String diagram)async{
      if(diagram==null||diagram==''){
@@ -100,11 +103,17 @@ class DatabaseServices{
 
   }
   Stream<List<Data>> dataAboutQues(String stream, String semester , String chapter,String subject){
-  return Firestore.instance.collection('brews').where('Course', isEqualTo: stream)
-      .where('Semester', isEqualTo: semester)
-      .where("Subject",isEqualTo:subject)
-      .where('Chapter',isEqualTo:chapter )
-      .snapshots().map(_dataListFromSnapshot);
+//  return Firestore.instance.collection('brews').where('Course', isEqualTo: stream)
+//      .where('Semester', isEqualTo: semester)
+//      .where("Subject",isEqualTo:subject)
+//      .where('Chapter',isEqualTo:chapter )
+//      .snapshots().map(_dataListFromSnapshot);
+    return Firestore.instance.collection('data')
+        .document(stream)
+        .collection(semester)
+        .document(subject.replaceAll("/", "-"))
+        .collection(chapter.replaceAll("/", "-"))
+        .snapshots().map(_dataListFromSnapshot);
   }
   Stream<List<Data>> getMyContributions(){
     return Firestore.instance.collection('brews').where('UserID', isEqualTo: uid)

@@ -5,6 +5,7 @@ import 'dart:ui' as ui;
 import 'package:studyoverflow/services/database.dart';
 import 'package:studyoverflow/models/descmodel.dart';
 import 'package:studyoverflow/screens/allQuestions/showdata.dart';
+import 'package:studyoverflow/shared/constants.dart';
 import 'package:studyoverflow/shared/loading.dart';
 import 'package:studyoverflow/shared/nodatascreen.dart';
 class ChapterList extends StatefulWidget {
@@ -22,13 +23,6 @@ class _ChapterListState extends State<ChapterList> {
   @override
   Widget build(BuildContext context) {
     int colorindex=0;
-    List gradientcolors=[
-      [Color(0xff6DC8F3), Color(0xff73A1F9)],
-      [Color(0xffFFB157), Color(0xffFFA057)],
-      [Color(0xffFF5B95), Color(0xffF8556D)],
-      [Color(0xffD76EF5), Color(0xff8F7AFE)],
-      [Color(0xff42E695), Color(0xff3BB2B8)],
-    ];
     return StreamBuilder(
       stream: DatabaseServices().getChapterNames(widget.subjectName),
       builder: (context, snapshot) {
@@ -36,11 +30,11 @@ class _ChapterListState extends State<ChapterList> {
           ChapterNames chapterNames = snapshot.data;
           List names=chapterNames.chapternames;
           return Scaffold(
-            body: names.isEmpty?nothingToShow("            No data present",'assets/notfound.png'):
+            body: names.isEmpty?nothingToShow("No data present",'assets/notfound.png'):
             ListView.builder(
               itemCount: names.length,
               itemBuilder: (context, index) {
-                if(index%5==0){
+                if(index%7==0){
                   colorindex=0;
                 }else{
                   colorindex++;

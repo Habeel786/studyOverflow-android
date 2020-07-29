@@ -1,5 +1,5 @@
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:studyoverflow/Animation/FadeAnimation.dart';
+import 'package:studyoverflow/services/Animation/FadeAnimation.dart';
 import 'package:flutter/material.dart';
 import 'package:studyoverflow/services/auth.dart';
 import 'package:studyoverflow/shared/loading.dart';
@@ -107,7 +107,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                     if(results==null){
                                       setState(() {
                                         loading=false;
-                                        //print(_auth.error);
                                       }
                                       );
                                       Fluttertoast.showToast(

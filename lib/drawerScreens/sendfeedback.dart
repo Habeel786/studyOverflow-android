@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:studyoverflow/Animation/FadeAnimation.dart';
-import 'file:///C:/Users/Smart%20computer/AndroidStudioProjects/studyoverflow/lib/services/database.dart';
+import 'package:studyoverflow/services/Animation/FadeAnimation.dart';
 import 'package:studyoverflow/models/user.dart';
+import 'package:studyoverflow/services/database.dart';
 class SendFeedback extends StatefulWidget {
   @override
   _SendFeedbackState createState() => _SendFeedbackState();

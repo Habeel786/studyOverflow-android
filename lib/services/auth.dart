@@ -53,7 +53,7 @@ Future forgotPassword(String email)async{
     _auth.sendPasswordResetEmail(email: email);
   }catch(e){
     print(e.toString());
-    return null;
+    return false;
   }
 }
 Stream<User> get user{

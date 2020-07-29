@@ -40,7 +40,6 @@ class _DemoState extends State<Demo> {
   }
   @override
   Widget build(BuildContext context) {
-    String answer="";
     return StreamBuilder(
         stream:_data,
         builder: (_ , snapshot){
@@ -66,10 +65,11 @@ class _DemoState extends State<Demo> {
               appBar: AppBar(
                 elevation: 0,
                 title: !isSearching?Text('Questions'):
-                Container(
+                AnimatedContainer(
+                  duration: Duration(milliseconds: 500),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    color: Colors.white70
+                      borderRadius: BorderRadius.circular(30),
+                      color: Colors.white
                   ),
                   child: Padding(
                     padding: const EdgeInsets.only(left: 20,right: 20),
@@ -81,7 +81,7 @@ class _DemoState extends State<Demo> {
                           color: Colors.black
                       ),
                       decoration: InputDecoration(
-                        border: InputBorder.none,
+                          border: InputBorder.none,
                           icon: Icon(Icons.search),
                           hintText: "Search Question Here",
                           hintStyle: TextStyle(
@@ -120,9 +120,6 @@ class _DemoState extends State<Demo> {
                       }else{
                         adFlag=false;
                       }
-//                      return ListTile(
-//                        title: Text(filteredMydata[index].question),
-//                      );
                      return adFlag?AdmobService().listtileWithAd(index,context,filteredMydata[index].answer,
                         filteredMydata[index].question,filteredMydata[index].chapter,filteredMydata[index].diagram,
                         filteredMydata[index].yearofrepeat,filteredMydata[index].marks,filteredMydata[index].postedBy,

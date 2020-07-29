@@ -90,107 +90,117 @@ class _MainScreenState extends State<MainScreen> {
         canvasColor: Color(0xFF2d3447),
         ),
               child: Drawer(
-                child: ListView(
-                  padding: EdgeInsets.zero,
-                  children: <Widget>[
-                    UserAccountsDrawerHeader(
-                      accountEmail: Text(
-                        user.email,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Montserrat',
-                            fontSize: 17,
-                            fontWeight: FontWeight.w500
+                child: Column(
+                  children: [
+                    Expanded(
+                        child:ListView(
+                          padding: EdgeInsets.zero,
+                          children: <Widget>[
+                            UserAccountsDrawerHeader(
+                              accountEmail: Text(
+                                user.email,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'Montserrat',
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w500
+                                ),
+                              ),
+                              accountName: Text(
+                                userData.name,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'Montserrat',
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w500
+                                ),
+                              ),
+                              decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                      colors: [Color(0xffD76EF5), Color(0xff8F7AFE)]
+                                  )
+                              ),
+                            ),
+                            SizedBox(height: 20,),
+                            ListTile(
+                              onTap: (){
+                                debugPrint("Tapped Profile");
+                              },
+                              leading: Icon(Icons.share,color: Colors.grey,),
+                              title: Text(
+                                  'Share App With Friends'
+                                  ,style: TextStyle(color: Colors.grey)
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            ListTile(
+                              onTap: () {
+                                debugPrint("Tapped settings");
+                              },
+                              leading: Icon(Icons.star_border,color: Colors.grey,),
+                              title: Text("Rate This App",style: TextStyle(color: Colors.grey)),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            ListTile(
+                              onTap: () {
+                                Navigator.pop(context);
+                                Navigator.push(context,MaterialPageRoute(builder: (_)=>AboutDev()));
+                              },
+                              leading: Icon(Icons.info_outline,color: Colors.grey,),
+                              title: Text("About Developer And App",style: TextStyle(color: Colors.grey)),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            ListTile(
+                              onTap: () {
+                                //debugPrint("Tapped Notifications");
+                                Navigator.pop(context);
+                                showAboutDialog(
+                                  context: context,
+                                  applicationVersion: '1.0.0',
+                                  applicationLegalese: TandC,
+                                  applicationIcon: AppIcon(),
+                                  applicationName: 'StudyOverflow',
+                                );
+                                //Navigator.push(context, MaterialPageRoute(builder: (context)=>TermsAndConditions()));
+                              },
+                              leading: Icon(Icons.receipt,color: Colors.grey,),
+                              title: Text("Terms And Condition",style: TextStyle(color: Colors.grey)),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            ListTile(
+                              onTap: () {
+                                Navigator.pop(context);
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>SendFeedback()));
+                              },
+                              leading: Icon(Icons.mail_outline,color: Colors.grey,),
+                              title: Text("Send FeedBack",style: TextStyle(color: Colors.grey)),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            ListTile(
+                              onTap: () async{
+                                AuthService().signOut();
+                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Wrapper()));
+                              },
+                              leading: Icon(Icons.exit_to_app,color: Colors.grey,),
+                              title: Text("Log Out",style: TextStyle(color: Colors.grey),),
+                            ),
+                          ],
                         ),
-                      ),
-                      accountName: Text(
-                          userData.name,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Montserrat',
-                            fontSize: 15,
-                            fontWeight: FontWeight.w500
-                        ),
-                      ),
-                      decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                              colors: [Color(0xffD76EF5), Color(0xff8F7AFE)]
-                          )
-                      ),
                     ),
-                    SizedBox(height: 20,),
-                    ListTile(
-                      onTap: (){
-                        debugPrint("Tapped Profile");
-                      },
-                      leading: Icon(Icons.share,color: Colors.grey,),
-                      title: Text(
-                        'Share App With Friends'
-                          ,style: TextStyle(color: Colors.grey)
-                      ),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    ListTile(
-                      onTap: () {
-                        debugPrint("Tapped settings");
-                      },
-                      leading: Icon(Icons.star_border,color: Colors.grey,),
-                      title: Text("Rate This App",style: TextStyle(color: Colors.grey)),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    ListTile(
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.push(context,MaterialPageRoute(builder: (_)=>AboutDev()));
-                      },
-                      leading: Icon(Icons.info_outline,color: Colors.grey,),
-                      title: Text("About Developer And App",style: TextStyle(color: Colors.grey)),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    ListTile(
-                      onTap: () {
-                        //debugPrint("Tapped Notifications");
-                        Navigator.pop(context);
-                        showAboutDialog(
-                          context: context,
-                          applicationVersion: '1.0.0',
-                          applicationLegalese: TandC,
-                          applicationIcon: AppIcon(),
-                          applicationName: 'StudyOverflow',
-                        );
-                        //Navigator.push(context, MaterialPageRoute(builder: (context)=>TermsAndConditions()));
-                      },
-                      leading: Icon(Icons.receipt,color: Colors.grey,),
-                      title: Text("Terms And Condition",style: TextStyle(color: Colors.grey)),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    ListTile(
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>SendFeedback()));
-                      },
-                      leading: Icon(Icons.mail_outline,color: Colors.grey,),
-                      title: Text("Send FeedBack",style: TextStyle(color: Colors.grey)),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    ListTile(
-                      onTap: () async{
-                        AuthService().signOut();
-                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Wrapper()));
-                      },
-                      leading: Icon(Icons.exit_to_app,color: Colors.grey,),
-                      title: Text("Log Out",style: TextStyle(color: Colors.grey),),
-                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('UID:${userData.uid}'),
+                    )
                   ],
                 ),
               ),

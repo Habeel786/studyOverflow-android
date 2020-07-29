@@ -5,6 +5,7 @@ import 'package:studyoverflow/services/database.dart';
 import 'package:responsive_container/responsive_container.dart';
 import 'package:studyoverflow/chapter/listchapter.dart';
 import 'package:studyoverflow/models/descmodel.dart';
+import 'package:studyoverflow/shared/constants.dart';
 class SubjectList extends StatefulWidget {
   final String semester;
   final String stream;
@@ -29,22 +30,22 @@ class _SubjectListState extends State<SubjectList> {
   @override
   Widget build(BuildContext context) {
     int colorindex=0;
-    List gradientcolors=[
-      [Color(0xff6DC8F3), Color(0xff73A1F9)],
-      [Color(0xffFFB157), Color(0xffFFA057)],
-      [Color(0xffFF5B95), Color(0xffF8556D)],
-      [Color(0xffD76EF5), Color(0xff8F7AFE)],
-      [Color(0xff42E695), Color(0xff3BB2B8)],
-      [Color(0xff56ab2f), Color(0xffa8e063)],
-      [Color(0xffeb3349), Color(0xfff45c43)],
-      [Color(0xff6DC8F3), Color(0xff73A1F9)],
-      [Color(0xffFFB157), Color(0xffFFA057)],
-      [Color(0xffFF5B95), Color(0xffF8556D)],
-      [Color(0xffD76EF5), Color(0xff8F7AFE)],
-      [Color(0xff42E695), Color(0xff3BB2B8)],
-      [Color(0xff56ab2f), Color(0xffa8e063)],
-      [Color(0xffeb3349), Color(0xfff45c43)],
-    ];
+//    List gradientcolors=[
+//      [Color(0xff6DC8F3), Color(0xff73A1F9)],
+//      [Color(0xffFFB157), Color(0xffFFA057)],
+//      [Color(0xffFF5B95), Color(0xffF8556D)],
+//      [Color(0xffD76EF5), Color(0xff8F7AFE)],
+//      [Color(0xff42E695), Color(0xff3BB2B8)],
+//      [Color(0xff56ab2f), Color(0xffa8e063)],
+//      [Color(0xffeb3349), Color(0xfff45c43)],
+//      [Color(0xff6DC8F3), Color(0xff73A1F9)],
+//      [Color(0xffFFB157), Color(0xffFFA057)],
+//      [Color(0xffFF5B95), Color(0xffF8556D)],
+//      [Color(0xffD76EF5), Color(0xff8F7AFE)],
+//      [Color(0xff42E695), Color(0xff3BB2B8)],
+//      [Color(0xff56ab2f), Color(0xffa8e063)],
+//      [Color(0xffeb3349), Color(0xfff45c43)],
+//    ];
     aspectratio = MediaQuery.of(context).size;
     if(aspectratio.toString()=='Size(480.0, 938.7)'){
       offset=1.2;
@@ -188,124 +189,6 @@ class _SubjectListState extends State<SubjectList> {
         ),
       ),
     );
-//    return Stack(
-//      children: <Widget>[
-//        ResponsiveContainer(
-//          //padding: EdgeInsets.only(right: 10),
-//          heightPercent:67,
-//          widthPercent: 70,
-//          child: Padding(
-//            padding: const EdgeInsets.only(top: 30,left: 10, right: 10),
-//            child: Container(
-//              decoration: BoxDecoration(
-//                borderRadius: BorderRadius.circular(20),
-//                gradient: LinearGradient(
-//                  colors: colors
-//                )
-//              ),
-//              height: 250,
-//              width: 225,
-//              child: Column(
-//                children: <Widget>[
-//                  Row(
-//                    mainAxisAlignment: MainAxisAlignment.end,
-//                    children: <Widget>[
-//                      Column(
-//                        children: <Widget>[
-//                          SizedBox(height: 10,),
-//                          Text(
-//                            index.toString(),
-//                            style: TextStyle(
-//                              fontSize: 20,
-//                              fontFamily: "Montserrat",
-//                              fontWeight: FontWeight.w200,
-//                              color: Colors.white,
-//
-//                            ),
-//                          )
-//                        ],
-//                      ),
-//                      SizedBox(width: 10,)
-//                    ],
-//                  ),
-//                    Container(
-//                      width: 160*divider,
-//                      height: 160*divider,
-//                      decoration: BoxDecoration(
-//                        color: Colors.transparent,
-////                          gradient: LinearGradient(
-////                              //begin: Alignment.topCenter,
-////                              colors: [
-////                                Color(0xFFfdfbfb),
-////                                Color(0xFFebedee),
-////
-////                              ]
-////                          ),
-//                        borderRadius: BorderRadius.circular(100),
-//                      ),
-//
-//                      //color: Colors.white,
-//                      child: imgpath!=null?Image.network(imgpath,fit: BoxFit.cover,):Image(image: AssetImage('assets/fancycolored.png'),fit: BoxFit.cover,),
-////                      child: Image.asset(
-////                          imgpath,
-////                        fit: BoxFit.cover,
-////                      ),
-//                    ),
-////                  Image(
-////                   // fit: BoxFit.values,
-////                    image:AssetImage(
-////                        imgpath,
-////
-////                    ),
-////                    height: 165.0,
-////
-////                  ),
-//                  Row(
-//                    children: <Widget>[
-//                      SizedBox(width: 25,),
-//                      Column(
-//                        crossAxisAlignment: CrossAxisAlignment.start,
-//                        children: <Widget>[
-//                          SizedBox(height: 30,),
-//                          SizedBox(
-//                            width: 200,
-//                            height: 50,
-//                            child: AutoSizeText(
-//                              subname,
-//                              style: TextStyle(
-//                                fontSize: 25,
-//                                fontFamily: "Montserrat",
-//                                fontWeight: FontWeight.w600,
-//                                color: Colors.white,
-//                              ),
-//                              maxLines: 2,
-//                            ),
-//                          ),
-//
-//                        ],
-//                      ),
-//
-//                    ],
-//                  ),
-//                  Container(
-//                    padding: EdgeInsets.only(top: 40*multiplier),
-//                    child: OutlineButton(onPressed: (){
-//                      Navigator.push(context, MaterialPageRoute(builder: (context)=>ChapterList(semester: semester,stream: stream,subjectName: subname,)));
-//                    },
-//                      child: Text("Get Questions",
-//                        style: TextStyle(color: Colors.white),),
-//                      borderSide: BorderSide(width: 2,
-//                          color: Colors.white),
-//                    ),
-//                  ),
-//                ],
-//              ),
-//            ),
-//          ),
-//        ),
-//
-//      ],
-//    );
   }
 
 }

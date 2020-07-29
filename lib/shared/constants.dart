@@ -6,7 +6,22 @@ const textInputDecoration=InputDecoration(
   enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white, width: 2.0)),
   focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.pink, width: 2.0)),
 );
-
+const List gradientcolors=[
+  [Color(0xff6DC8F3), Color(0xff73A1F9)],
+  [Color(0xffFFB157), Color(0xffFFA057)],
+  [Color(0xffFF5B95), Color(0xffF8556D)],
+  [Color(0xffD76EF5), Color(0xff8F7AFE)],
+  [Color(0xff42E695), Color(0xff3BB2B8)],
+  [Color(0xff56ab2f), Color(0xffa8e063)],
+  [Color(0xffeb3349), Color(0xfff45c43)],
+  [Color(0xff6DC8F3), Color(0xff73A1F9)],
+  [Color(0xffFFB157), Color(0xffFFA057)],
+  [Color(0xffFF5B95), Color(0xffF8556D)],
+  [Color(0xffD76EF5), Color(0xff8F7AFE)],
+  [Color(0xff42E695), Color(0xff3BB2B8)],
+  [Color(0xff56ab2f), Color(0xffa8e063)],
+  [Color(0xffeb3349), Color(0xfff45c43)],
+];
 const TandC=
     'By downloading or using the app, these terms will automatically apply to you – you should make sure therefore that you read them carefully before using the app.'
     ' You’re not allowed to copy, or modify the app, any part of the app, or our trademarks in any way.'

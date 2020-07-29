@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:studyoverflow/screens/home/description.dart';
+import 'file:///C:/Users/Smart%20computer/AndroidStudioProjects/studyoverflow/lib/screens/allQuestions/description.dart';
 class AdmobService{
   String getAdMobAppID(){
     if(Platform.isAndroid){

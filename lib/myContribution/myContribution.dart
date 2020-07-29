@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:studyoverflow/models/descmodel.dart';
 import 'package:studyoverflow/models/user.dart';
 import 'package:studyoverflow/myContribution/addQuestion.dart';
-import 'package:studyoverflow/screens/home/description.dart';
+import 'file:///C:/Users/Smart%20computer/AndroidStudioProjects/studyoverflow/lib/screens/allQuestions/description.dart';
 import 'package:studyoverflow/services/database.dart';
 import 'package:studyoverflow/shared/loading.dart';
 import 'package:studyoverflow/shared/nodatascreen.dart';

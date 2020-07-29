@@ -1,5 +1,5 @@
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:studyoverflow/Animation/FadeAnimation.dart';
+import 'package:studyoverflow/services/Animation/FadeAnimation.dart';
 import 'package:flutter/material.dart';
 import 'package:studyoverflow/screens/authentication/forgotPassword.dart';
 import 'package:studyoverflow/services/auth.dart';
