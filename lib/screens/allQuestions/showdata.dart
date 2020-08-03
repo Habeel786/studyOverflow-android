@@ -1,5 +1,6 @@
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:draggable_scrollbar/draggable_scrollbar.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:studyoverflow/services/admob_service.dart';
@@ -36,17 +37,40 @@ class _DemoState extends State<Demo> {
     // TODO: implement initState
     super.initState();
     Admob.initialize('ca-app-pub-9118153038397153~5910414684');
-    _data= DatabaseServices().dataAboutQues(widget.stream,widget.semester,widget.chapter,widget.subject);
+    _data= FirebaseDatabase.instance.reference().child('test').child(widget.stream)
+        .orderByChild('Category').equalTo(widget.stream+'-'+widget.semester+'-'+widget.subject
+        +'-'+widget.chapter
+    ).onValue;
   }
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream:_data,
-        builder: (_ , snapshot){
+      stream: _data,
+        builder: (_ , AsyncSnapshot<Event> snapshot){
           if(snapshot.connectionState==ConnectionState.waiting){
             return Loading();
           }else{
-            mydata= snapshot.data;
+            mydata.clear();
+            Map<dynamic, dynamic> map = snapshot.data.snapshot.value??{};
+            map.forEach((k, v){
+            mydata.add(new Data(
+              key: k,
+              chapter: v['Category'].toString().split('-')[3]??'',
+              answer:  v['Answer']??'',
+              course:  v['Category'].toString().split('-')[0]??'',
+              question: v['Question']??'',
+              semester:  v['Category'].toString().split('-')[1]??'',
+              subject:  v['Category'].toString().split('-')[2]??'',
+              diagram: v['Diagram']??'',
+              yearofrepeat:v['YearOfRepeat']??'',
+              marks: v['Marks']??'',
+              thumbnail: v['Thumbnail']??'',
+              postedBy: v['PostedBy']??'',
+              postedOn: v['PostedOn']??'',
+              dislike: v['DisLike']??0,
+              like: v['Like']??0,
+                ));
+            });
             filterthedata(String value){
              setState(() {
                tempdata=mydata.where((u) =>
@@ -124,12 +148,12 @@ class _DemoState extends State<Demo> {
                         filteredMydata[index].question,filteredMydata[index].chapter,filteredMydata[index].diagram,
                         filteredMydata[index].yearofrepeat,filteredMydata[index].marks,filteredMydata[index].postedBy,
                         filteredMydata[index].postedOn, filteredMydata[index].like,filteredMydata[index].dislike,
-                       filteredMydata[index].semester
+                       filteredMydata[index].semester,filteredMydata[index].key,filteredMydata[index].course,
                       ):AdmobService().listtileWithoutAd(index,context,filteredMydata[index].answer,
                         filteredMydata[index].question,filteredMydata[index].chapter,filteredMydata[index].diagram,
                         filteredMydata[index].yearofrepeat,filteredMydata[index].marks,filteredMydata[index].postedBy,
                         filteredMydata[index].postedOn,filteredMydata[index].like,filteredMydata[index].dislike,
-                         filteredMydata[index].semester
+                         filteredMydata[index].semester,filteredMydata[index].key, filteredMydata[index].course,
                      );
                     }
                     ),
@@ -140,3 +164,4 @@ class _DemoState extends State<Demo> {
       );
   }
 }
+

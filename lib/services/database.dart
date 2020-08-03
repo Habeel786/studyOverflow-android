@@ -1,37 +1,50 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:studyoverflow/models/user.dart';
 import '../models/descmodel.dart';
 class DatabaseServices{
   final uid;
   DatabaseServices({this.uid});
-  CollectionReference dataCollection = Firestore.instance.collection('data');
+  //CollectionReference dataCollection = Firestore.instance.collection('data');
   CollectionReference brewCollection = Firestore.instance.collection("users");
-  CollectionReference brewCollectionQuestions = Firestore.instance.collection("brews");
+  //CollectionReference brewCollectionQuestions = Firestore.instance.collection("brews");
 
-  Future updateLikes(int likes,String question,String semester)async{
-    return await brewCollectionQuestions.document(question+"-"+semester).updateData({
+  final DatabaseReference database = FirebaseDatabase.instance.reference().child('test');
+  Future updateLikes(int likes,String key,String course)async{
+    return await database.child(course).child(key).update({
       'Like':likes,
     });
   }
-  Future updateDisLikes(int dislikes,String question,String semester)async{
-    return await brewCollectionQuestions.document(question+"-"+semester).updateData({
+  Future updateDisLikes(int dislikes,String key,String course)async{
+    return await database.child(course).child(key).update({
       'DisLike':dislikes,
     });
   }
-  Future updateUserQuestion(String question,String answer,String subject,
+
+  Future setUserQuestion(String question,String answer,String subject,
       String course,String semester,String chapter,
       String diagram, String yearofrepeat,String marks,
-      String name,int like,int disLike)async {
+      String name,int like,int disLike, String key)async {
 //    return await brewCollectionQuestions.document(question+"-"+semester).setData({
-    return await dataCollection.document(course).collection(semester).document(subject.replaceAll("/", "-")).collection(chapter.replaceAll("/", "-")).document(question.replaceAll("/", "-")+semester).setData(
-        {
+//    return await dataCollection.document(course).collection(semester).document(subject.replaceAll("/", "-")).collection(chapter.replaceAll("/", "-")).document(question.replaceAll("/", "-")+semester).setData(
+//        {
+    return await (key==null||key=='')?database.child(course).push().set({
       'Question': question,
       'Answer': answer,
-      'Course': course,
-      'Semester': semester,
-      'Subject': subject,
-      'Chapter': chapter,
+      'Category':course+"-"+semester+"-"+subject+"-"+chapter,
+      'Diagram':diagram,
+      'YearOfRepeat':yearofrepeat,
+      'Marks':marks,
+      'UserID':uid,
+      'PostedBy':name,
+      'PostedOn':DateTime.now().toString(),
+      'Like':like,
+      'DisLike':disLike,
+    }):database.child(course).child(key).set({
+      'Question': question,
+      'Answer': answer,
+      'Category':course+"-"+semester+"-"+subject+"-"+chapter,
       'Diagram':diagram,
       'YearOfRepeat':yearofrepeat,
       'Marks':marks,
@@ -42,6 +55,7 @@ class DatabaseServices{
       'DisLike':disLike,
     });
   }
+
   Future updateUserData(String semester, String name, String stream)async{
     return await brewCollection.document(uid).setData({
       'Semester' : semester,
@@ -49,6 +63,7 @@ class DatabaseServices{
       'Stream' : stream
     });
   }
+
   CollectionReference feedBack = Firestore.instance.collection("feedback");
   Future feedback(String name, String email, String phone,String feedback)async{
     return await feedBack.document(uid).setData({
@@ -70,55 +85,57 @@ class DatabaseServices{
 //    return qn.documents;
 //  }
 
-  Future deleteData(String question,String semester,String diagram)async{
+  Future deleteData(String question,String course,String diagram,String key)async{
      if(diagram==null||diagram==''){
-       await brewCollectionQuestions.document(question+'-'+semester).delete();
+      // await brewCollectionQuestions.document(question+'-'+semester).delete();
+       await database.child(course).child(key).remove();
      }else{
-       await brewCollectionQuestions.document(question+'-'+semester).delete();
+      // await brewCollectionQuestions.document(question+'-'+semester).delete();
+       await database.child(course).child(key).remove();
        final StorageReference strref = FirebaseStorage.instance.ref().child(question);
        return await strref.delete();
      }
 
   }
 
-  List<Data> _dataListFromSnapshot(QuerySnapshot snapshot){
-  return snapshot.documents.map((doc){
-  return Data(
-        chapter: doc.data['Chapter']??'',
-        answer:  doc.data['Answer']??'',
-        course:  doc.data['Course']??'',
-        question: doc.data['Question']??'',
-        semester:  doc.data['Semester']??'',
-        subject:  doc.data['Subject']??'',
-        diagram: doc.data['Diagram']??'',
-        yearofrepeat:doc.data['YearOfRepeat']??'',
-        marks: doc.data['Marks']??'',
-        thumbnail: doc.data['Thumbnail']??'',
-        postedBy: doc.data['PostedBy']??'',
-        postedOn: doc.data['PostedOn']??'',
-        dislike: doc.data['DisLike']??0,
-        like: doc.data['Like']??0,
-  );
-  }).toList();
-
-  }
-  Stream<List<Data>> dataAboutQues(String stream, String semester , String chapter,String subject){
-//  return Firestore.instance.collection('brews').where('Course', isEqualTo: stream)
-//      .where('Semester', isEqualTo: semester)
-//      .where("Subject",isEqualTo:subject)
-//      .where('Chapter',isEqualTo:chapter )
-//      .snapshots().map(_dataListFromSnapshot);
-    return Firestore.instance.collection('data')
-        .document(stream)
-        .collection(semester)
-        .document(subject.replaceAll("/", "-"))
-        .collection(chapter.replaceAll("/", "-"))
-        .snapshots().map(_dataListFromSnapshot);
-  }
-  Stream<List<Data>> getMyContributions(){
-    return Firestore.instance.collection('brews').where('UserID', isEqualTo: uid)
-        .snapshots().map(_dataListFromSnapshot);
-  }
+//  List<Data> _dataListFromSnapshot(QuerySnapshot snapshot){
+//  return snapshot.documents.map((doc){
+//  return Data(
+//        chapter: doc.data['Chapter']??'',
+//        answer:  doc.data['Answer']??'',
+//        course:  doc.data['Course']??'',
+//        question: doc.data['Question']??'',
+//        semester:  doc.data['Semester']??'',
+//        subject:  doc.data['Subject']??'',
+//        diagram: doc.data['Diagram']??'',
+//        yearofrepeat:doc.data['YearOfRepeat']??'',
+//        marks: doc.data['Marks']??'',
+//        thumbnail: doc.data['Thumbnail']??'',
+//        postedBy: doc.data['PostedBy']??'',
+//        postedOn: doc.data['PostedOn']??'',
+//        dislike: doc.data['DisLike']??0,
+//        like: doc.data['Like']??0,
+//  );
+//  }).toList();
+//
+//  }
+//  Stream<List<Data>> dataAboutQues(String stream, String semester , String chapter,String subject){
+////  return Firestore.instance.collection('brews').where('Course', isEqualTo: stream)
+////      .where('Semester', isEqualTo: semester)
+////      .where("Subject",isEqualTo:subject)
+////      .where('Chapter',isEqualTo:chapter )
+////      .snapshots().map(_dataListFromSnapshot);
+//    return Firestore.instance.collection('data')
+//        .document(stream)
+//        .collection(semester)
+//        .document(subject.replaceAll("/", "-"))
+//        .collection(chapter.replaceAll("/", "-"))
+//        .snapshots().map(_dataListFromSnapshot);
+//  }
+//  Stream<List<Data>> getMyContributions(){
+//    return Firestore.instance.collection('brews').where('UserID', isEqualTo: uid)
+//        .snapshots().map(_dataListFromSnapshot);
+//  }
 
 
   UserData _userDataFromSnapshot(DocumentSnapshot snapshot){

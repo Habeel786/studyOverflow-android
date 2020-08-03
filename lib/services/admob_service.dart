@@ -34,7 +34,9 @@ class AdmobService{
       postedon,
       like,
       dislike,
-      semester
+      semester,
+      keys,
+      course
       ){
     return Column(
       children: [
@@ -51,7 +53,8 @@ class AdmobService{
               Navigator.push(context, MaterialPageRoute(builder: (context)=>Description(answer:answer,
                 question:question,chapter:chapter,diagram:diagram,
                 yearofrepeat:yearofrepeat,marks:marks,postedBy:postedby,
-                postedOn:postedon,like: like,dislike: dislike,semester:semester ,
+                postedOn:postedon,like: like,dislike: dislike,semester:semester,
+                keys: keys,course: course,
               )));
             },
             title: Text(question,style: TextStyle(color: Colors.white70),),
@@ -89,7 +92,9 @@ class AdmobService{
       postedon,
       like,
       dislike,
-      semester
+      semester,
+      keys,
+      course
       ){
     return Card(
       color: Color(0xFF2d3447),
@@ -100,6 +105,7 @@ class AdmobService{
             question:question,chapter:chapter,diagram:diagram,
             yearofrepeat:yearofrepeat,marks:marks,postedBy:postedby,
             postedOn:postedon,like: like,dislike: dislike,semester: semester,
+            keys: keys,course: course,
           )));
         },
         title: Text(question,style: TextStyle(color: Colors.white70),),

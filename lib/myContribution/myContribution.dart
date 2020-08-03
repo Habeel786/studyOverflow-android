@@ -1,3 +1,4 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -32,15 +33,42 @@ class _MyContributionsState extends State<MyContributions> {
     }
   }
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
     return StreamBuilder(
-              stream:DatabaseServices(uid:user.uid).getMyContributions(),
-              builder: (_ , snapshot){
+              stream:FirebaseDatabase.instance.reference().child('test').child('computer engineering')
+                  .orderByChild('UserID')
+                  .equalTo(user.uid).onValue,
+              builder: (_ , AsyncSnapshot<Event> snapshot){
                 if(snapshot.connectionState==ConnectionState.waiting){
                   return Loading();
                 }else{
-                  mydata= snapshot.data;
+                  mydata.clear();
+                  Map<dynamic, dynamic> map = snapshot.data.snapshot.value;
+                  map.forEach((k, v){
+                    mydata.add(new Data(
+                      key: k,
+                      chapter: v['Category'].toString().split('-')[3]??'',
+                      answer:  v['Answer']??'',
+                      course:  v['Category'].toString().split('-')[0]??'',
+                      question: v['Question']??'',
+                      semester:  v['Category'].toString().split('-')[1]??'',
+                      subject:  v['Category'].toString().split('-')[2]??'',
+                      diagram: v['Diagram']??'',
+                      yearofrepeat:v['YearOfRepeat']??'',
+                      marks: v['Marks']??'',
+                      thumbnail: v['Thumbnail']??'',
+                      postedBy: v['PostedBy']??'',
+                      postedOn: v['PostedOn']??'',
+                      dislike: v['DisLike']??0,
+                      like: v['Like']??0,
+                    ));
+                  });
                   for(int i=0;i<mydata.length;i++){
                     temp.add(mydata[i].subject);
                   }
@@ -107,6 +135,7 @@ class _MyContributionsState extends State<MyContributions> {
                                             question:filteredmydata[index].question,chapter:filteredmydata[index].chapter,diagram:filteredmydata[index].diagram,
                                             yearofrepeat:filteredmydata[index].yearofrepeat,marks:filteredmydata[index].marks,postedBy:filteredmydata[index].postedBy,
                                             postedOn:filteredmydata[index].postedOn,like: filteredmydata[index].like,dislike: filteredmydata[index].dislike,semester: filteredmydata[index].semester,
+                                            keys: filteredmydata[index].key,course: filteredmydata[index].course,
                                           )));
                                         },
                                         title: Text(filteredmydata[index].question,style: TextStyle(color: Colors.white70),),
@@ -128,11 +157,12 @@ class _MyContributionsState extends State<MyContributions> {
                                                     Navigator.push(context, MaterialPageRoute(builder: (context)=>AddQuestion(uanswer:filteredmydata[index].answer,
                                                       uquestion:filteredmydata[index].question,uchapter:filteredmydata[index].chapter,udiagram: filteredmydata[index].diagram,
                                                       uyearOfrepeat:filteredmydata[index].yearofrepeat,umarks:filteredmydata[index].marks, usubject: filteredmydata[index].subject,
+                                                      ukey: filteredmydata[index].key ,
                                                     )));
                                                   }),
                                               IconButton(
                                                   icon: Icon(Icons.delete,color: Colors.grey,),
-                                                  onPressed: (){infoDialog(context, filteredmydata[index].question, filteredmydata[index].semester, filteredmydata[index].diagram);})
+                                                  onPressed: (){infoDialog(context, filteredmydata[index].question, filteredmydata[index].course, filteredmydata[index].diagram,filteredmydata[index].key);})
                                             ],
                                           ),
                                         ),
@@ -150,7 +180,7 @@ class _MyContributionsState extends State<MyContributions> {
     );
   }
 }
-Future<bool> infoDialog(context,question,semester,diagram){
+Future<bool> infoDialog(context,question,course,diagram,key){
   return showDialog(
       context: context,
     barrierDismissible: true,
@@ -164,7 +194,7 @@ Future<bool> infoDialog(context,question,semester,diagram){
               Navigator.of(context).pop();
             }, child: Text('No')),
             FlatButton(onPressed: ()async{
-              DatabaseServices().deleteData(question,semester,diagram);
+              DatabaseServices().deleteData(question,course,diagram,key);
               Navigator.of(context).pop();
               }, child: Text('Yes')),
           ],

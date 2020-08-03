@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:studyoverflow/services/database.dart';
 import 'package:vector_math/vector_math_64.dart' show Vector3;
 import 'package:flutter/cupertino.dart';
@@ -16,9 +17,9 @@ class Description extends StatefulWidget {
  final dynamic postedOn;
  final int like;
  final int dislike;
+ final String keys;
  final String semester;
-
-
+ final String course;
 
  Description({this.question,
    this.answer,
@@ -30,25 +31,38 @@ class Description extends StatefulWidget {
    this.postedOn,
    this.like,
    this.dislike,
-   this.semester
+   this.semester,
+   this.keys,
+   this.course,
  });
+var banner;
 
  @override
   _DescriptionState createState() => _DescriptionState();
 }
-
 class _DescriptionState extends State<Description> {
   final ams = AdmobService();
   double _scale = 1.0;
   double _previousScale = 1.0;
   bool isLiked=false;
   bool isDisliked=false;
-
+ increment(int count,bool operation){
+   operation?DatabaseServices().updateLikes(count+1, widget.keys,widget.course):
+   DatabaseServices().updateDisLikes(count+1, widget.keys, widget.course);
+ }
+ decrement(int count,bool operation){
+   operation?DatabaseServices().updateLikes(count-1, widget.keys,widget.course):
+   DatabaseServices().updateDisLikes(count-1, widget.keys, widget.course);
+ }
+ var banner;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     Admob.initialize('ca-app-pub-9118153038397153~5910414684');
+    banner =  AdmobBanner(
+        adUnitId: "ca-app-pub-9118153038397153/1410457549",
+        adSize: AdmobBannerSize.FULL_BANNER);
   }
   @override
   Widget build(BuildContext context) {
@@ -112,52 +126,147 @@ class _DescriptionState extends State<Description> {
                           alignment: Alignment.bottomLeft,
                          child: Row(
                             children: <Widget>[
-                              Column(
-                                children: [
-                                  IconButton(
-                                      icon: Icon(
-                                          Icons.sentiment_satisfied,
-                                        color: isLiked?Colors.blue:Colors.grey,
-                                      ),
-                                      onPressed: (){
-                                        setState(() {
-                                          isLiked=true;
-                                          isDisliked=false;
-                                        });
-                                        DatabaseServices().updateLikes(widget.like+1, widget.question, widget.semester);
-                                      },
-                                  ),
-                                  Text(
-                                      widget.like.toString(),
-                                    style: TextStyle(
-                                      color: Colors.blue
-                                    ),
-                                  )
-                                ],
+                              StreamBuilder(
+                                stream:FirebaseDatabase.instance.reference().child('test').child(widget.course)
+                                    .child(widget.keys).child('Like').onValue,
+                                builder: (context,AsyncSnapshot<Event> snapshot){
+                                  if(snapshot.connectionState==ConnectionState.waiting){
+                                    return Column(
+                                      children: [
+                                        IconButton(
+                                          onPressed: (){
+                                            //setLike();
+                                            isLiked==false?increment(widget.like,true):decrement(widget.like,true);
+                                            setState(() {
+                                              isLiked=!isLiked;
+                                            });
+                                          },
+                                          icon: Icon(
+                                            Icons.sentiment_satisfied,
+                                            color: isLiked?Colors.blue:Colors.grey,
+                                          ),
+
+                                        ),
+                                        Text(
+                                          widget.like.toString(),
+                                          style: TextStyle(
+                                              color: Colors.blue
+                                          ),
+                                        )
+                                      ],
+                                    );
+                                  }else{
+                                    int like=snapshot.data.snapshot.value;
+                                    print("like=$like");
+                                    return Column(
+                                      children: [
+                                        IconButton(
+                                          onPressed: (){
+                                            //setLike();
+                                            isLiked==false?increment(like,true):decrement(like,true);
+                                            setState(() {
+                                              isLiked=!isLiked;
+                                            });
+                                          },
+                                          icon: Icon(
+                                            Icons.sentiment_satisfied,
+                                            color: isLiked?Colors.blue:Colors.grey,
+                                          ),
+
+                                        ),
+                                        Text(
+                                          like.toString(),
+                                          style: TextStyle(
+                                              color: Colors.blue
+                                          ),
+                                        )
+                                      ],
+                                    );
+                                  }
+                                },
                               ),
-                              Column(
-                                children: [
-                                  IconButton(
-                                    icon: Icon(
-                                        Icons.sentiment_dissatisfied,
-                                      color: isDisliked?Colors.red:Colors.grey,
-                                    ),
-                                    onPressed: (){
-                                      setState(() {
-                                        isDisliked=true;
-                                        isLiked=false;
-                                      });
-                                      DatabaseServices().updateDisLikes(widget.dislike+1, widget.question, widget.semester);
-                                    },
-                                  ),
-                                  Text(
-                                      widget.dislike.toString(),
-                                    style: TextStyle(
-                                        color: Colors.red
-                                    ),
-                                  )
-                                ],
-                              )
+                              StreamBuilder(
+                                stream:FirebaseDatabase.instance.reference().child('test').child(widget.course)
+                                    .child(widget.keys).child('DisLike').onValue,
+                                builder: (context,AsyncSnapshot<Event> snapshot){
+                                  if(snapshot.connectionState==ConnectionState.waiting){
+                                    return Column(
+                                      children: [
+                                        IconButton(
+                                          onPressed: (){
+                                            //setLike();
+                                            isLiked==false?increment(widget.dislike,false):decrement(widget.dislike,false);
+                                            setState(() {
+                                              isDisliked=!isDisliked;
+                                            });
+                                          },
+                                          icon: Icon(
+                                            Icons.sentiment_satisfied,
+                                            color: isDisliked?Colors.red:Colors.grey,
+                                          ),
+
+                                        ),
+                                        Text(
+                                          widget.dislike.toString(),
+                                          style: TextStyle(
+                                              color: Colors.blue
+                                          ),
+                                        )
+                                      ],
+                                    );
+                                  }else{
+                                    int dislike=snapshot.data.snapshot.value;
+                                    return Column(
+                                      children: [
+                                        IconButton(
+                                          onPressed: (){
+                                            //setLike();
+                                            isDisliked==false?increment(dislike,false):decrement(dislike,false);
+                                            setState(() {
+                                              isDisliked=!isDisliked;
+                                            });
+                                          },
+                                          icon: Icon(
+                                            Icons.sentiment_satisfied,
+                                            color: isDisliked?Colors.red:Colors.grey,
+                                          ),
+
+                                        ),
+                                        Text(
+                                          dislike.toString(),
+                                          style: TextStyle(
+                                              color: Colors.blue
+                                          ),
+                                        )
+                                      ],
+                                    );
+                                  }
+                                },
+                              ),
+
+//                              Column(
+//                                children: [
+//                                  IconButton(
+//                                    icon: Icon(
+//                                        Icons.sentiment_dissatisfied,
+//                                      color: isDisliked?Colors.red:Colors.grey,
+//                                    ),
+//                                    onPressed: (){
+//                                      setState(() {
+//                                        isDisliked=true;
+//                                        isLiked=false;
+//                                      });
+//                                      DatabaseServices().updateDisLikes(widget.dislike+1, widget.question, widget.semester);
+//                                    },
+//                                  ),
+//                                  Text(
+//                                      widget.dislike.toString(),
+//                                    style: TextStyle(
+//                                        color: Colors.red
+//                                    ),
+//                                  )
+//                                ],
+//                              )
                             ],
                           ),
                         ),
@@ -186,9 +295,7 @@ class _DescriptionState extends State<Description> {
                   //AD_HERE
                   Align(
                     alignment: Alignment.center,
-                    child: AdmobBanner(
-                        adUnitId: "ca-app-pub-9118153038397153/1410457549",
-                        adSize: AdmobBannerSize.FULL_BANNER),
+                    child:banner,
                   ),
                   SizedBox(height: 20,),
                 ],

@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:studyoverflow/screens/allQuestions/newshowdata.dart';
 import 'dart:ui' as ui;
 import 'package:studyoverflow/services/database.dart';
 import 'package:studyoverflow/models/descmodel.dart';
@@ -66,6 +67,7 @@ class ChapterTile extends StatelessWidget {
       padding: const EdgeInsets.all(10.0),
       child: InkWell(
         onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>Demo(semester: semester,stream: stream,subject:subject,chapter: chapterName,))),
+       // onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>NewShowData())),
         child: Stack(
           children:<Widget>[
             Container(

@@ -12,6 +12,7 @@ import 'package:studyoverflow/shared/constants.dart';
 import 'package:studyoverflow/shared/loading.dart';
 import 'package:studyoverflow/shared/nodatascreen.dart';
 class AddQuestion extends StatefulWidget {
+  String ukey;
   String uyearOfrepeat;
   String uquestion;
   String uanswer;
@@ -22,7 +23,7 @@ class AddQuestion extends StatefulWidget {
   int ulike;
   int udisLike;
     AddQuestion({this.uyearOfrepeat, this.uquestion, this.uanswer, this.usubject,
-    this.umarks, this.uchapter, this.udiagram,this.udisLike,this.ulike});
+    this.umarks, this.uchapter, this.udiagram,this.udisLike,this.ulike,this.ukey});
 
   @override
   _AddQuestionState createState() => _AddQuestionState();
@@ -255,7 +256,7 @@ class _AddQuestionState extends State<AddQuestion> {
                               if(diagram!=null){
                                 diagramlink=await UploadImage().uploadImage(question??widget.uquestion,diagram);
                               }
-                              dynamic result=await DatabaseServices(uid: user.uid).updateUserQuestion(
+                              dynamic result=await DatabaseServices(uid: user.uid).setUserQuestion(
                                   question??widget.uquestion,
                                   answer??widget.uanswer,
                                   _currentsubject??widget.usubject,
@@ -268,6 +269,7 @@ class _AddQuestionState extends State<AddQuestion> {
                                   userData.name,
                                   widget.ulike??0,
                                   widget.udisLike??0,
+                                  widget.ukey
                               );
                               print('result:${result}');
                               print("Data entered successfully");

@@ -2,6 +2,7 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:studyoverflow/drawerScreens/aboutDevScreen.dart';
+import 'package:studyoverflow/screens/allQuestions/newshowdata.dart';
 import 'package:studyoverflow/services/database.dart';
 import 'package:studyoverflow/drawerScreens/sendfeedback.dart';
 import 'package:studyoverflow/drawerScreens/termsAndConditions.dart';

@@ -1,4 +1,5 @@
 class Data{
+   final String key;
    final String question;
    final String answer;
    final String course;
@@ -13,7 +14,7 @@ class Data{
    final dynamic postedOn;
    final int like;
    final int dislike;
-   Data({this.question, this.answer, this.course, this.semester, this.subject,
+   Data({this.key,this.question, this.answer, this.course, this.semester, this.subject,
        this.chapter,this.diagram,this.yearofrepeat,this.marks,this.thumbnail,this.postedBy,this.postedOn,
    this.like,this.dislike
    });
