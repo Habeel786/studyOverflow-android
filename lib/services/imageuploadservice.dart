@@ -1,14 +1,25 @@
 import 'dart:io';
+
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 class UploadImage{
-  Future<dynamic> uploadImage(String imageName,File diagram)async{
+  Future<File> getImage(source) async {
+    var diagramImage = await ImagePicker.pickImage(
+      source: source,
+      imageQuality: 10,
+    );
+    return diagramImage;
+  }
+
+  Future<dynamic> uploadImage(String imageName, File imagefile,
+      String path) async {
     print('image upload in process');
-    final StorageReference strref = FirebaseStorage.instance.ref().child(imageName);
-    final  StorageUploadTask task = strref.putFile(diagram);
+    final StorageReference strref = FirebaseStorage.instance.ref().child(
+        path + imageName);
+    final StorageUploadTask task = strref.putFile(imagefile);
     StorageTaskSnapshot storageTaskSnapshot;
     StorageTaskSnapshot snapshot=await task.onComplete;
     if(snapshot.error==null){
@@ -21,7 +32,8 @@ class UploadImage{
       return null;
     }
   }
-  Widget enableUpload(File image,String url){
+
+  Widget displayDiagram(File image, String url) {
     return InkWell(
       onLongPress: ()async{
         if(url!=null){
@@ -41,3 +53,4 @@ class UploadImage{
     );
   }
 }
+

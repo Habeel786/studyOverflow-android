@@ -1,11 +1,28 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:studyoverflow/drawerScreens/termsAndConditions.dart';
 const textInputDecoration=InputDecoration(
   focusColor: Colors.pink,
   filled: true,
-  fillColor:Colors.white,
-  enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white, width: 2.0)),
-  focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.pink, width: 2.0)),
+  fillColor: Colors.white70,
+  enabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Colors.grey, width: 2.0)),
+  focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: Color(0xFF2d3447), width: 2.0)),
 );
+
+String getInitials(String name) {
+  String initials;
+  if (name.contains(" ")) {
+    var wordLists = name.split(" ");
+    initials = wordLists[0].substring(0, 1).toUpperCase() +
+        wordLists[1].substring(0, 1).toLowerCase();
+  } else {
+    initials = name[0];
+  }
+  return initials;
+}
+
 const List gradientcolors=[
   [Color(0xff6DC8F3), Color(0xff73A1F9)],
   [Color(0xffFFB157), Color(0xffFFA057)],
@@ -45,8 +62,61 @@ const TandC=
 
 Widget AppIcon(){
   return SizedBox(
-    height: 30,
+      height: 30,
       width: 30,
       child: Image.asset("assets/fancycolored.png")
+  );
+}
+
+Future<bool> ConfirmationDialogue(context) async {
+  bool isConfirm = false;
+  await showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Color(0xFF2d3447),
+          title: Text('Delete?', style: TextStyle(color: Colors.grey),),
+          content: Text(
+              'Delete this item?', style: TextStyle(color: Colors.grey)),
+          actions: [
+            FlatButton(onPressed: () {
+              isConfirm = false;
+              Navigator.pop(context);
+            }, child: Text('No')),
+            FlatButton(onPressed: () async {
+              isConfirm = true;
+              Navigator.pop(context);
+            }, child: Text('Yes')),
+          ],
+        );
+      }
+  );
+  return isConfirm;
+}
+
+Widget tandCText(context) {
+  return RichText(
+    text: TextSpan(
+        children: [
+          TextSpan(
+              text: "By continuing, you agree to studyOverflow's ",
+              style: TextStyle(
+                  color: Colors.grey[600]
+              )
+          ),
+          TextSpan(
+              text: "terms and conditions",
+              style: TextStyle(
+                  color: Colors.blue
+              ),
+              recognizer: TapGestureRecognizer()
+                ..onTap = () {
+                  Navigator.push(context, MaterialPageRoute(
+                      builder: (context) => TermsAndConditions()));
+                }
+          ),
+        ]
+    ),
   );
 }

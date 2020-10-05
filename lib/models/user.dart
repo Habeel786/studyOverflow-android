@@ -10,7 +10,8 @@ class UserData{
   final String stream;
   final String semester;
   final String name;
+  String profilepic;
 
-  UserData({this.uid,this.stream,this.semester,this.name});
+  UserData({this.uid, this.stream, this.semester, this.name, this.profilepic});
 }
 

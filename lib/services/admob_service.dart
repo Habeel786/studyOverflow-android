@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:admob_flutter/admob_flutter.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+
 import 'file:///C:/Users/Smart%20computer/AndroidStudioProjects/studyoverflow/lib/screens/allQuestions/description.dart';
 class AdmobService{
   String getAdMobAppID(){
@@ -67,14 +67,12 @@ class AdmobService{
 
             ),
             trailing: SizedBox(
-              width: 100,
-              child: AutoSizeText(yearofrepeat??"",
-                style: TextStyle(
-                    fontSize: 10,
-                    color: Colors.grey
-                ),
+              width: 40,
+              child: Text(
+                yearofrepeat,
+                style: TextStyle(color: Colors.grey),
               ),
-            ),
+            )
           ),
         ),
       ],
@@ -118,14 +116,12 @@ class AdmobService{
 
         ),
         trailing: SizedBox(
-          width: 100,
-          child: AutoSizeText(yearofrepeat??"",
-            style: TextStyle(
-                fontSize: 10,
-                color: Colors.grey
-            ),
+          width: 40,
+          child: Text(
+            yearofrepeat,
+            style: TextStyle(color: Colors.grey),
           ),
-        ),
+        )
       ),
     );
   }

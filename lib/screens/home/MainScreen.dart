@@ -1,16 +1,15 @@
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:studyoverflow/screens/home/selectsubject.dart';
 import 'package:studyoverflow/drawerScreens/aboutDevScreen.dart';
-import 'package:studyoverflow/screens/allQuestions/newshowdata.dart';
 import 'package:studyoverflow/services/database.dart';
 import 'package:studyoverflow/drawerScreens/sendfeedback.dart';
-import 'package:studyoverflow/drawerScreens/termsAndConditions.dart';
 import 'package:studyoverflow/models/user.dart';
 import 'package:studyoverflow/myContribution/myContribution.dart';
 import 'package:studyoverflow/preference/setstream.dart';
 import 'package:studyoverflow/screens/home/home.dart';
-import 'package:studyoverflow/screens/home/selectsubject.dart';
 import 'package:studyoverflow/services/auth.dart';
 import 'package:studyoverflow/shared/constants.dart';
 import 'package:studyoverflow/shared/loading.dart';
@@ -23,20 +22,37 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int currentIndex=0;
   var _pagecontroller=PageController();
-  final tabs=[
-    Home(),
-    SelectStrSem(),
-    MyContributions(),
-    SetStream(),
-  ];
+  String imageText;
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
+    print(user.uid);
     return StreamBuilder(
       stream:DatabaseServices(uid: user.uid).userData ,
       builder:(context,snapshot){
         if(snapshot.hasData){
           UserData userData = snapshot.data;
+          print(userData.semester);
+          final tabs = [
+            Home(),
+            SelectStrSem(),
+//            Description(course: '',
+//            keys: '',
+//            semester: '',
+//            dislike: 0,
+//            like: 0,
+//            postedOn: 'datehabeelhashmi78612345',
+//            postedBy: 'm3ViUcbWnmV0qZwOrmfQa3zUmAu2',
+//            chapter: '',
+//            diagram: '',
+//            answer: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+//            marks: '4',
+//            question: 'What is Lorem Ipsum?',
+//            yearofrepeat: '2019,2018,2017',),
+            MyContributions(finalStream: userData.stream,),
+            SetStream(),
+          ];
+
           return  Scaffold(
             body:PageView(
               controller: _pagecontroller,
@@ -98,6 +114,31 @@ class _MainScreenState extends State<MainScreen> {
                           padding: EdgeInsets.zero,
                           children: <Widget>[
                             UserAccountsDrawerHeader(
+                              currentAccountPicture: ClipRRect(
+                                borderRadius: BorderRadius.circular(50),
+                                child: userData.profilepic == null ||
+                                    userData.profilepic == '' ?
+                                Container(
+                                  color: Color(0xFF2d3447),
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    getInitials(userData.name),
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 30,
+                                        fontWeight: FontWeight.w500
+                                    ),
+                                  ),
+                                ) : CachedNetworkImage(
+                                  imageUrl: userData.profilepic,
+                                  fit: BoxFit.cover,
+                                  progressIndicatorBuilder: (context, url,
+                                      downloadProgress) =>
+                                      CircularProgressIndicator(
+                                          value: downloadProgress.progress),
+                                ),
+                              ),
                               accountEmail: Text(
                                 user.email,
                                 style: TextStyle(
@@ -138,7 +179,6 @@ class _MainScreenState extends State<MainScreen> {
                             ),
                             ListTile(
                               onTap: () {
-                                debugPrint("Tapped settings");
                               },
                               leading: Icon(Icons.star_border,color: Colors.grey,),
                               title: Text("Rate This App",style: TextStyle(color: Colors.grey)),
@@ -159,16 +199,13 @@ class _MainScreenState extends State<MainScreen> {
                             ),
                             ListTile(
                               onTap: () {
-                                //debugPrint("Tapped Notifications");
                                 Navigator.pop(context);
                                 showAboutDialog(
                                   context: context,
                                   applicationVersion: '1.0.0',
                                   applicationLegalese: TandC,
-                                  applicationIcon: AppIcon(),
                                   applicationName: 'StudyOverflow',
                                 );
-                                //Navigator.push(context, MaterialPageRoute(builder: (context)=>TermsAndConditions()));
                               },
                               leading: Icon(Icons.receipt,color: Colors.grey,),
                               title: Text("Terms And Condition",style: TextStyle(color: Colors.grey)),
@@ -198,9 +235,16 @@ class _MainScreenState extends State<MainScreen> {
                           ],
                         ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text('UID:${userData.uid}'),
+                    Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(userData.uid.toString(),
+                          style: TextStyle(
+                              fontSize: 10
+                          ),
+                        ),
+                      ),
                     )
                   ],
                 ),

@@ -77,7 +77,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                   ),
                                   child: TextFormField(
                                     style: TextStyle(color: Colors.grey),
-                                    validator: (val)=>val.isEmpty?"Enter Valid Email": null,
+                                    validator: (val) =>
+                                    val.isEmpty || (!val.contains('.com'))
+                                        ? "Enter Valid Email"
+                                        : null,
                                     onChanged:(val){
                                       setState(() {
                                         email=val;

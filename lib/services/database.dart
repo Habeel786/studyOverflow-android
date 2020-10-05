@@ -2,30 +2,49 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:studyoverflow/models/user.dart';
+
 import '../models/descmodel.dart';
 class DatabaseServices{
   final uid;
   DatabaseServices({this.uid});
   //CollectionReference dataCollection = Firestore.instance.collection('data');
-  CollectionReference brewCollection = Firestore.instance.collection("users");
+  CollectionReference userCollection = Firestore.instance.collection("users");
   //CollectionReference brewCollectionQuestions = Firestore.instance.collection("brews");
 
   final DatabaseReference database = FirebaseDatabase.instance.reference().child('test');
-  Future updateLikes(int likes,String key,String course)async{
-    return await database.child(course).child(key).update({
+  final DatabaseReference notesNode = FirebaseDatabase.instance.reference()
+      .child('notesNode');
+
+//------------------------------LIke DisLike-------------------------------------------------------//
+  Future updateLikes(int likes, String key, String course,
+      DatabaseReference databaseReference) async {
+    return await databaseReference.child(course).child(key).update({
       'Like':likes,
     });
   }
-  Future updateDisLikes(int dislikes,String key,String course)async{
-    return await database.child(course).child(key).update({
+
+  Future updateDownloads(int downloads, String key, String course,
+      DatabaseReference databaseReference) async {
+    return await databaseReference.child(course).child(key).update({
+      'Downloads': downloads,
+    });
+  }
+
+  Future updateDisLikes(int dislikes, String key, String course,
+      DatabaseReference databaseReference) async {
+    return await databaseReference.child(course).child(key).update({
       'DisLike':dislikes,
     });
   }
 
+//------------------------------Like Dislike-----------------------------------------------//
+
+
+  //-----------------------set/update data-----------------------//
   Future setUserQuestion(String question,String answer,String subject,
       String course,String semester,String chapter,
       String diagram, String yearofrepeat,String marks,
-      String name,int like,int disLike, String key)async {
+      int like, int disLike, String key, String diagamID) async {
 //    return await brewCollectionQuestions.document(question+"-"+semester).setData({
 //    return await dataCollection.document(course).collection(semester).document(subject.replaceAll("/", "-")).collection(chapter.replaceAll("/", "-")).document(question.replaceAll("/", "-")+semester).setData(
 //        {
@@ -34,10 +53,10 @@ class DatabaseServices{
       'Answer': answer,
       'Category':course+"-"+semester+"-"+subject+"-"+chapter,
       'Diagram':diagram,
+      'DiagramID': diagamID,
       'YearOfRepeat':yearofrepeat,
       'Marks':marks,
-      'UserID':uid,
-      'PostedBy':name,
+      'PostedBy': uid,
       'PostedOn':DateTime.now().toString(),
       'Like':like,
       'DisLike':disLike,
@@ -46,23 +65,73 @@ class DatabaseServices{
       'Answer': answer,
       'Category':course+"-"+semester+"-"+subject+"-"+chapter,
       'Diagram':diagram,
+      'DiagramID': diagamID,
       'YearOfRepeat':yearofrepeat,
       'Marks':marks,
-      'UserID':uid,
-      'PostedBy':name,
+      'PostedBy': uid,
       'PostedOn':DateTime.now().toString(),
       'Like':like,
       'DisLike':disLike,
     });
   }
 
-  Future updateUserData(String semester, String name, String stream)async{
-    return await brewCollection.document(uid).setData({
-      'Semester' : semester,
-      'Name' : name,
-      'Stream' : stream
+  //-----------------------set/update data-----------------------//
+
+  //------------------------add/Update notes--------------------//
+
+  Future addNotes(String title, String notesURL, String thumbnailURL,
+      String subject, String key, String course, String semester,
+      String thumbnailID, String notesID, int like, int downloads) async {
+    return (key == null || key == '') ? notesNode.child(course).push().set({
+      'Title': title,
+      'PostedBy': uid,
+      'Category': course + "-" + semester + "-" + subject,
+      'ThumbnailURL': thumbnailURL,
+      'ThumbnailID': thumbnailID,
+      'NotesURL': notesURL,
+      'NotesID': notesID,
+      'PostedOn': DateTime.now().toString(),
+      'Like': like,
+      'Downloads': downloads,
+    }) : notesNode.child(course).child(key).update({
+      'Title': title,
+      'PostedBy': uid,
+      'Category': course + "-" + semester + "-" + subject,
+      'ThumbnailURL': thumbnailURL,
+      'ThumbnailID': thumbnailID,
+      'NotesURL': notesURL,
+      'NotesID': notesID,
+      'PostedOn': DateTime.now().toString(),
     });
   }
+
+  //------------------------add/Update notes--------------------//
+
+  //----------------------update user data---------------------//
+  Future updateUserData(String semester, String name, String stream,
+      String profilePic) async {
+    return await userCollection.document(uid).setData({
+      'Semester' : semester,
+      'Name' : name,
+      'Stream': stream,
+      'ProfilePic': profilePic,
+    });
+  }
+
+  Future<bool> updateProfilePic(profilepic) async {
+    try {
+      await userCollection.document(uid).updateData({
+        'ProfilePic': profilepic,
+      });
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  //----------------------update user data---------------------//
+
+  //----------------------send feedback-------------------------//
 
   CollectionReference feedBack = Firestore.instance.collection("feedback");
   Future feedback(String name, String email, String phone,String feedback)async{
@@ -74,6 +143,7 @@ class DatabaseServices{
     });
   }
 
+  //----------------------send feedback-------------------------//
 //  Future getData(String semester, String stream, String subject,String chapter) async{
 //    var firestore = Firestore.instance;
 //    QuerySnapshot qn = await firestore.collection("brews")
@@ -85,18 +155,41 @@ class DatabaseServices{
 //    return qn.documents;
 //  }
 
-  Future deleteData(String question,String course,String diagram,String key)async{
+  //--------------------------delete data--------------------------------//
+  Future deleteQuestionsData(String diagramID, String course, String diagram,
+      String key) async {
      if(diagram==null||diagram==''){
       // await brewCollectionQuestions.document(question+'-'+semester).delete();
        await database.child(course).child(key).remove();
      }else{
       // await brewCollectionQuestions.document(question+'-'+semester).delete();
        await database.child(course).child(key).remove();
-       final StorageReference strref = FirebaseStorage.instance.ref().child(question);
+       final StorageReference strref = FirebaseStorage.instance.ref().child(
+           "diagrams/" + diagramID);
        return await strref.delete();
      }
 
   }
+
+  Future deleteNotesData(String thumbnailID, String course, String notesID,
+      String key) async {
+    if (thumbnailID == null || thumbnailID == '') {
+      await notesNode.child(course).child(key).remove();
+      final StorageReference deleteNotes = FirebaseStorage.instance.ref().child(
+          "notes/" + notesID + '.pdf');
+      await deleteNotes.delete();
+    } else {
+      await notesNode.child(course).child(key).remove();
+      final StorageReference strref = FirebaseStorage.instance.ref().child(
+          "notesThumbnail/" + thumbnailID);
+      await strref.delete();
+      final StorageReference deleteNotes = FirebaseStorage.instance.ref().child(
+          "notes/" + notesID + '.pdf');
+      await deleteNotes.delete();
+    }
+  }
+
+  //--------------------------delete data--------------------------------//
 
 //  List<Data> _dataListFromSnapshot(QuerySnapshot snapshot){
 //  return snapshot.documents.map((doc){
@@ -137,22 +230,25 @@ class DatabaseServices{
 //        .snapshots().map(_dataListFromSnapshot);
 //  }
 
-
+//---------------------------get user data------------------------------------//
   UserData _userDataFromSnapshot(DocumentSnapshot snapshot){
     return UserData(
       uid: uid,
-      name: snapshot.data['Name'],
-      semester:snapshot.data['Semester'],
-      stream: snapshot.data['Stream'],
+        name: snapshot.data['Name'] ?? '',
+        semester: snapshot.data['Semester'] ?? '',
+        stream: snapshot.data['Stream'] ?? '',
+        profilepic: snapshot.data['ProfilePic'] ?? ''
     );
   }
 
   //user data
   Stream<UserData> get userData{
-    return brewCollection.document(uid).snapshots().map(_userDataFromSnapshot);
+    return userCollection.document(uid).snapshots().map(_userDataFromSnapshot);
   }
 
+//---------------------------get user data------------------------------------//
 
+  //-----------------------------------get thumbnail-----------------------------------//
 Stream<SubjectThumbnail> getThumbnail(String stream, String semester){
   return Firestore.instance.collection('imagecollection').document(stream+'-'+semester).snapshots().map(_subjectThumbnail);
 }
@@ -160,7 +256,9 @@ Stream<SubjectThumbnail> getThumbnail(String stream, String semester){
     return SubjectThumbnail(thumbnail:snapshot.data['subimg']);
   }
 
+//----------------------------------get thumbnails---------------------------------//
 
+  //----------------------------------get chapter names-------------------------------//
 
   Stream<ChapterNames> getChapterNames(String subjectname){
     return Firestore.instance.collection('chapternames').document(subjectname).snapshots().map(_chapterNames);
@@ -170,7 +268,10 @@ Stream<SubjectThumbnail> getThumbnail(String stream, String semester){
     return ChapterNames(chapternames:snapshot.data['chapters']);
   }
 
-//----------getting stream names---------------//
+  //----------------------------------get chapter names-------------------------------//
+
+
+//------------------------------------------get stream names---------------------------------------//
   Stream<StreamNames> getStreamNames(String docname){
     return Firestore.instance.collection('stream').document(docname).snapshots().map(_streamNames);
   }
@@ -178,6 +279,16 @@ Stream<SubjectThumbnail> getThumbnail(String stream, String semester){
   StreamNames _streamNames(DocumentSnapshot snapshot){
     return StreamNames(streamnames:snapshot.data['streamlist']);
   }
+
+//------------------------------------------get stream names---------------------------------------//
+
+  deleteImage(String path, String id) async {
+    final StorageReference strref = FirebaseStorage.instance.ref().child(
+        path + id);
+    await strref.delete();
+  }
+
+
 }
 
 

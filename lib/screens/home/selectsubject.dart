@@ -9,8 +9,10 @@ class _SelectStrSemState extends State<SelectStrSem> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:nothingToShow(
-          'We Are Currently Working On This Feature It Will Be Available Soon','assets/onboarding1.png')
+        body: nothingToShow(
+            'We Are Currently Working On This Feature It Will Be Available Soon',
+            'assets/onboarding1.png')
     );
   }
 }
+

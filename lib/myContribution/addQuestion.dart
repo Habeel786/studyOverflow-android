@@ -11,6 +11,7 @@ import 'package:studyoverflow/services/imageuploadservice.dart';
 import 'package:studyoverflow/shared/constants.dart';
 import 'package:studyoverflow/shared/loading.dart';
 import 'package:studyoverflow/shared/nodatascreen.dart';
+import 'package:uuid/uuid.dart';
 class AddQuestion extends StatefulWidget {
   String ukey;
   String uyearOfrepeat;
@@ -20,10 +21,11 @@ class AddQuestion extends StatefulWidget {
   String umarks;
   String uchapter;
   String udiagram;
+  String udiagramId;
   int ulike;
   int udisLike;
     AddQuestion({this.uyearOfrepeat, this.uquestion, this.uanswer, this.usubject,
-    this.umarks, this.uchapter, this.udiagram,this.udisLike,this.ulike,this.ukey});
+      this.umarks, this.uchapter, this.udiagram, this.udisLike, this.ulike, this.ukey, this.udiagramId});
 
   @override
   _AddQuestionState createState() => _AddQuestionState();
@@ -40,6 +42,7 @@ class _AddQuestionState extends State<AddQuestion> {
   final List<String> marks = ['1','2','3','4','5','6','7','8'];
   final List<String> courses = ['computer engineering','BSC','commerce','electronics engineering','civil engineering','electrical engineering'];
   bool loading= false;
+  bool removeDiagram = false;
   String isSuccessfull="";
   String _currentsubject;
   String _currentMarks;
@@ -49,27 +52,31 @@ class _AddQuestionState extends State<AddQuestion> {
   String diagramlink;
   String currentImageURL;
   File diagram;
-  Widget ImageOrText;
   bool toggleImageText=true;
+  String imageName;
+  String diagramID;
   Future getDiagramImage()async{
     var diagramImage=await ImagePicker.pickImage(
       source: ImageSource.gallery,
-      imageQuality: 50,
+      imageQuality: 20,
     );
     setState(() {
       widget.udiagram=null;
       diagram=diagramImage;
-
     });
+  }
+
+  setDiagramID() {
+    diagramID = Uuid().v4();
   }
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
     return loading?Loading():Scaffold(
-      backgroundColor: Colors.pink[50],
+      backgroundColor: Colors.grey,
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
-        backgroundColor:Color(0xffD76EF5),
+        backgroundColor: Color(0xFF2d3447),
         title: Text("AddQuestion"),
         centerTitle: true,
 
@@ -236,62 +243,126 @@ class _AddQuestionState extends State<AddQuestion> {
                           SizedBox(height: 20,),
                           //chapter
                           Center(
-                                child:diagram==null&&(widget.udiagram==null||widget.udiagram=='')?Text('Diagram empty'):UploadImage().enableUpload(diagram,widget.udiagram),
+                            child: diagram == null &&
+                                (widget.udiagram == null ||
+                                    widget.udiagram == '') ? Text(
+                                'Diagram empty') :
+                            Stack(
+                              children: [
+                                Visibility(
+                                  visible: widget.udiagram == null ? diagram !=
+                                      null : widget.udiagram != '',
+                                  child: Align(
+                                    alignment: Alignment.topRight,
+                                    child: IconButton(
+                                        icon: Icon(Icons.clear),
+                                        onPressed: () async {
+                                          setState(() {
+                                            removeDiagram = true;
+                                            diagram = null;
+                                            diagramlink = null;
+                                            diagramID = null;
+                                            widget.udiagram = null;
+                                          });
+                                        }),
+                                  ),
+                                ),
+                                ShowImage()
+                              ],
+                            ),
                           ),
                           SizedBox(height: 40,),
-                          OutlineButton(
-                            onPressed: getDiagramImage,
-                            child: Text("Choose a diagram"),
+                          InkWell(
+                            onTap: () {
+                              getDiagramImage();
+                            },
+                            child: Container(
+                              height: 50,
+                              margin: EdgeInsets.symmetric(horizontal: 50),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  color: Color(0xFF2d3447)
+                              ),
+                              child: Center(
+                                child: Text("Select a diagram if required",
+                                  style: TextStyle(color: Colors.white,
+                                      fontWeight: FontWeight.bold),),
+                              ),
+                            ),
                           ),
                           SizedBox(height: 20,),
-
-                          SizedBox(height: 20,),
-                          RaisedButton(
-                              onPressed: () async {
-                            if(_formkey.currentState.validate()){
-                              setState(() {
-                                loading=true;
-                              });
-                              _yearOfRepeat=this.multiSelectKey.currentState.result.toString();
-                              if(diagram!=null){
-                                diagramlink=await UploadImage().uploadImage(question??widget.uquestion,diagram);
-                              }
-                              dynamic result=await DatabaseServices(uid: user.uid).setUserQuestion(
-                                  question??widget.uquestion,
-                                  answer??widget.uanswer,
-                                  _currentsubject??widget.usubject,
-                                  userData.stream,
-                                  userData.semester,
-                                  _currentchapter??widget.uchapter,
-                                  currentImageURL??diagramlink??widget.udiagram,
-                                  _yearOfRepeat=="[]"?widget.uyearOfrepeat:_yearOfRepeat,
-                                  _currentMarks??widget.umarks,
-                                  userData.name,
-                                  widget.ulike??0,
-                                  widget.udisLike??0,
-                                  widget.ukey
-                              );
-                              print('result:${result}');
-                              print("Data entered successfully");
-                              if(result!=null){
+                          InkWell(
+                            onTap: () async {
+                              if (_formkey.currentState.validate()) {
                                 setState(() {
-                                  loading=false;
-                                  Fluttertoast.showToast(
-                                    msg: 'Error Occured',
-                                    toastLength: Toast.LENGTH_SHORT,);
+                                  loading = true;
                                 });
-                              }else{
-                                setState(() {
-                                  loading=false;
-                                  Fluttertoast.showToast(
-                                    msg: 'Data Updated!',
-                                    toastLength: Toast.LENGTH_SHORT,);
-                                });
+                                _yearOfRepeat =
+                                    this.multiSelectKey.currentState.result
+                                        .toString();
+                                if (diagram != null) {
+                                  setDiagramID();
+                                  diagramlink = await UploadImage().uploadImage(
+                                      widget.udiagramId ?? diagramID, diagram,
+                                      'diagrams/');
+                                }
+                                if (removeDiagram) {
+                                  await DatabaseServices().deleteImage(
+                                      'diagrams/', widget.udiagramId);
+                                  widget.udiagramId = null;
+                                }
+                                dynamic result = await DatabaseServices(
+                                    uid: user.uid).setUserQuestion(
+                                    question ?? widget.uquestion,
+                                    answer ?? widget.uanswer,
+                                    _currentsubject ?? widget.usubject,
+                                    userData.stream,
+                                    userData.semester,
+                                    _currentchapter ?? widget.uchapter,
+                                    currentImageURL ?? diagramlink ??
+                                        widget.udiagram,
+                                    _yearOfRepeat == "[]"
+                                        ? widget.uyearOfrepeat
+                                        : _yearOfRepeat,
+                                    _currentMarks ?? widget.umarks,
+                                    widget.ulike ?? 0,
+                                    widget.udisLike ?? 0,
+                                    widget.ukey,
+                                    widget.udiagramId ?? diagramID
+                                );
+                                print('result:${result}');
+                                print("Data entered successfully");
+                                if (result != null) {
+                                  setState(() {
+                                    loading = false;
+                                    Fluttertoast.showToast(
+                                      msg: 'Error Occured',
+                                      toastLength: Toast.LENGTH_SHORT,);
+                                  });
+                                } else {
+                                  setState(() {
+                                    loading = false;
+                                    Fluttertoast.showToast(
+                                      msg: 'Data Updated!',
+                                      toastLength: Toast.LENGTH_SHORT,);
+                                  });
+                                }
                               }
-                            }
-
-                          },color: Color(0xffD76EF5),child:Text("Submit", style: TextStyle(color: Colors.white),)),
-                          SizedBox(height: 20,),
+                            },
+                            child: Container(
+                              height: 50,
+                              margin: EdgeInsets.symmetric(horizontal: 50),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50),
+                                  color: Color(0xFF2d3447)
+                              ),
+                              child: Center(
+                                child: Text("Submit", style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),),
+                              ),
+                            ),
+                          ),
                         ],
                       )
                   ),
@@ -308,7 +379,9 @@ class _AddQuestionState extends State<AddQuestion> {
 
   Widget ShowImage(){
     return Center(
-      child: diagram==null&&widget.udiagram==null?Text('Diagram empty'):UploadImage().enableUpload(diagram,widget.udiagram),
+      child: diagram == null && widget.udiagram == null
+          ? Text('Diagram empty')
+          : UploadImage().displayDiagram(diagram, widget.udiagram),
     );
   }
   Widget ShowTextField(){

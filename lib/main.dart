@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:provider/provider.dart';
 import 'package:studyoverflow/models/user.dart';
 import 'package:studyoverflow/screens/wrapper.dart';
 import 'package:studyoverflow/services/auth.dart';
 
-
-
 void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await FlutterDownloader.initialize(
+      debug: false // optional: set false to disable printing logs to console
+  );
   runApp(MyApp());
 }
 

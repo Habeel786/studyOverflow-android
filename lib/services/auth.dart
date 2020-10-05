@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
-import 'file:///C:/Users/Smart%20computer/AndroidStudioProjects/studyoverflow/lib/services/database.dart';
 import 'package:studyoverflow/models/user.dart';
+
+import 'file:///C:/Users/Smart%20computer/AndroidStudioProjects/studyoverflow/lib/services/database.dart';
 class AuthService{
 final FirebaseAuth _auth =FirebaseAuth.instance;
 String error="";
@@ -13,7 +13,8 @@ Future registerWithEmailAndPassword(String email, String password, String name, 
 try{
       AuthResult result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       FirebaseUser user =result.user;
-      await DatabaseServices(uid: user.uid).updateUserData(semester, name, stream);
+      await DatabaseServices(uid: user.uid).updateUserData(
+          semester, name, stream, '');
       dynamic extractedUser =_userFromFirebaseUser(user);
       //print(user);
       return extractedUser;
