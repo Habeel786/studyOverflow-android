@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:studyoverflow/models/notificationModel.dart';
 import 'package:studyoverflow/models/user.dart';
 
 import '../models/descmodel.dart';
@@ -269,6 +270,17 @@ Stream<SubjectThumbnail> getThumbnail(String stream, String semester){
   }
 
   //----------------------------------get chapter names-------------------------------//
+
+  //------------------------------get notifications-----------------------------------//
+
+  Stream<NotificationModel> getNotifications(){
+    return Firestore.instance.collection('alerts').document('notifications').snapshots().map(_notifications);
+  }
+  NotificationModel _notifications(DocumentSnapshot snapshot){
+    return NotificationModel(notifications:snapshot.data['nots']);
+  }
+
+  //------------------------------get notifications-----------------------------------//
 
 
 //------------------------------------------get stream names---------------------------------------//

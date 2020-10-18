@@ -61,7 +61,7 @@ class _ShowNotesState extends State<ShowNotes> {
               });
               return mydata.isEmpty
                   ? nothingToShow(
-                      'No notes present for this subject, be the first one to contribute',
+                      'No notes available for this subject, be the first one to contribute',
                       'assets/notfound.png')
                   : CustomScrollView(
                       primary: false,
@@ -73,7 +73,7 @@ class _ShowNotesState extends State<ShowNotes> {
                             bottomRight: Radius.circular(30),
                           )),
                           centerTitle: true,
-                          title: Text('Demo'),
+                          title: Text(widget.subject),
                           pinned: true,
                           expandedHeight:
                               MediaQuery.of(context).size.height * 0.25,

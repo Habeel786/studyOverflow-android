@@ -1,6 +1,5 @@
 import 'package:flutter/gestures.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:studyoverflow/drawerScreens/termsAndConditions.dart';
 import 'package:studyoverflow/services/Animation/FadeAnimation.dart';
 import 'package:flutter/material.dart';
 import 'package:studyoverflow/services/auth.dart';
@@ -29,6 +28,7 @@ class _NewRegisterState extends State<NewRegister> {
   List semesters=['1','2','3','4','5','6'];
   String error="";
   bool loading= false;
+  bool passwordVisible=false;
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +132,7 @@ class _NewRegisterState extends State<NewRegister> {
                                       ),
                                       child: TextFormField(
                                         style: TextStyle(color: Colors.grey),
-                                        obscureText: true,
+                                        obscureText: !passwordVisible,
                                         onChanged: (val) {
                                           setState(() {
                                             password = val;
@@ -143,6 +143,17 @@ class _NewRegisterState extends State<NewRegister> {
                                             ? "Password Must Be 8 Chars Long"
                                             : null,
                                         decoration: InputDecoration(
+                                          suffixIcon: GestureDetector(
+                                            onTap: (){
+                                              setState(() {
+                                                passwordVisible=!passwordVisible;
+                                              });
+                                            },
+                                            child:Icon(
+                                              Icons.visibility_off,
+                                              color: passwordVisible?Colors.blue:Colors.grey,
+                                            ),
+                                          ),
                                             labelText: "Password",
                                             labelStyle: TextStyle(
                                                 color: Colors.grey),
@@ -242,7 +253,6 @@ class _NewRegisterState extends State<NewRegister> {
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      //child: Text("By continuing, you agree to studyOverflow's terms and conditions"),
                                       child: tandCText(context),
                                     )
                                   ],

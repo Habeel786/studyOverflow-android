@@ -11,6 +11,7 @@ class Like extends StatefulWidget {
   String operation;
   DatabaseReference databaseReference;
   bool trigger;
+  Color iconColor;
 
   Like(
       {this.course,
@@ -20,7 +21,8 @@ class Like extends StatefulWidget {
       this.icon,
       this.operation,
       this.databaseReference,
-      this.trigger});
+      this.trigger,
+      this.iconColor});
 
   @override
   _LikeState createState() => _LikeState();
@@ -72,13 +74,12 @@ class _LikeState extends State<Like> {
               ),
               Text(
                 widget.count.toString(),
-                style: TextStyle(color: Colors.blue),
+                style: TextStyle(color: widget.iconColor??Colors.blue),
               )
             ],
           );
         } else {
           int count = snapshot.data.snapshot.value;
-          print("like=$count");
           return Column(
             children: [
               InkWell(
@@ -93,12 +94,12 @@ class _LikeState extends State<Like> {
                 },
                 child: Icon(
                   widget.icon,
-                  color: widget.isClicked ? Colors.blue : Colors.grey,
+                  color: widget.isClicked ? Colors.blue : widget.iconColor??Colors.grey,
                 ),
               ),
               Text(
                 count.toString(),
-                style: TextStyle(color: Colors.blue),
+                style: TextStyle(color: widget.iconColor??Colors.blue),
               )
             ],
           );

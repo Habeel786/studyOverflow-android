@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:studyoverflow/models/user.dart';
 import 'package:studyoverflow/screens/home/tabbarview.dart';
 import 'package:studyoverflow/services/database.dart';
@@ -21,7 +20,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   var heightforsmalldevices=1.0;
   TabController tabController;
   int currentIndex = 0;
-  SharedPreferences sharedPrefs;
   bool loading=false;
   @override
   initState(){
@@ -47,8 +45,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       builder: (context, snapshot){
         if(snapshot.hasData){
           UserData userData = snapshot.data;
-          print(userData.stream);
-          print(userData.semester);
           bool isPortrait;
           if (MediaQuery
               .of(context)
@@ -69,7 +65,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                           width: 5.0,
                         ),
                         Text(
-                          'StudyOverflow',
+                          'Study Overflow',
                           style: TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.w500,
@@ -97,7 +93,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                           alignment: Alignment.centerLeft,
                           height: height * 0.15,
                           child: Text(
-                            'StudyOverflow',
+                            'Study Overflow',
                             style: TextStyle(
                               fontSize: 27,
                               fontWeight: FontWeight.w500,

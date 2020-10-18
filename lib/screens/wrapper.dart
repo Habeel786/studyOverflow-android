@@ -15,7 +15,6 @@ class _WrapperState extends State<Wrapper> {
 
 
     final user = Provider.of<User>(context);
-    print(user);
     return (user==null)?Authenticate():MainScreen();
   }
 }

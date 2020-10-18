@@ -3,6 +3,7 @@ import 'package:studyoverflow/services/Animation/FadeAnimation.dart';
 import 'package:flutter/material.dart';
 import 'package:studyoverflow/services/auth.dart';
 import 'package:studyoverflow/shared/loading.dart';
+import 'package:studyoverflow/widgets/gradientbutton.dart';
 
 class ForgotPassword extends StatefulWidget {
   final Function toggleView;
@@ -72,9 +73,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                               children: <Widget>[
                                 Container(
                                   padding: EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                      border: Border(bottom: BorderSide(color: Colors.grey[200]))
-                                  ),
                                   child: TextFormField(
                                     style: TextStyle(color: Colors.grey),
                                     validator: (val) =>
@@ -100,46 +98,33 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           Column(
                             children: <Widget>[
                               //-----------------BUTTON---------------//
-                              FadeAnimation(1.6, GestureDetector(
-                                onTap: ()async{
-                                  if(_formkey.currentState.validate()) {
+                              FadeAnimation(1.6,GradientButton(
+                              onTap: ()async{
+                                if(_formkey.currentState.validate()) {
+                                  setState(() {
+                                    loading=true;
+                                  });
+                                  dynamic results = await _auth.forgotPassword(email);
+                                  if(results==null){
                                     setState(() {
-                                      loading=true;
-                                    });
-                                    dynamic results = await _auth.forgotPassword(email);
-                                    if(results==null){
-                                      setState(() {
-                                        loading=false;
-                                      }
-                                      );
-                                      Fluttertoast.showToast(
-                                        msg: 'reset password link sent to your email address',
-                                        toastLength: Toast.LENGTH_SHORT,);
-                                    }else{
-                                      setState(() {
-                                        loading=false;
-                                        //print(_auth.error);
-                                      }
-                                      );
-                                      Fluttertoast.showToast(
-                                        msg: 'failed',
-                                        toastLength: Toast.LENGTH_SHORT,);
+                                      loading=false;
                                     }
+                                    );
+                                    Fluttertoast.showToast(
+                                      msg: 'reset password link sent to your email address',
+                                      toastLength: Toast.LENGTH_SHORT,);
+                                  }else{
+                                    setState(() {
+                                      loading=false;
+                                    }
+                                    );
+                                    Fluttertoast.showToast(
+                                      msg: 'failed',
+                                      toastLength: Toast.LENGTH_SHORT,);
                                   }
-                                },
-                                child: Container(
-                                  height: 50,
-                                  margin: EdgeInsets.symmetric(horizontal: 50),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(50),
-                                      gradient: LinearGradient(
-                                          colors: [Color(0xffD76EF5), Color(0xff8F7AFE)]
-                                      )
-                                  ),
-                                  child: Center(
-                                    child: Text("Next", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
-                                  ),
-                                ),
+                                }
+                              },
+                                text: 'Next',
                               )),
                               //-----------------BUTTON---------------//
                             ],

@@ -8,7 +8,7 @@ import 'package:studyoverflow/models/notesModel.dart';
 import 'package:studyoverflow/models/user.dart';
 import 'package:studyoverflow/myContribution/addNotes.dart';
 import 'package:studyoverflow/myContribution/addQuestion.dart';
-import 'file:///C:/Users/Smart%20computer/AndroidStudioProjects/studyoverflow/lib/screens/allQuestions/description.dart';
+import 'package:studyoverflow/screens/allQuestions/description.dart';
 import 'package:studyoverflow/services/database.dart';
 import 'package:studyoverflow/shared/constants.dart';
 import 'package:studyoverflow/shared/loading.dart';
@@ -184,7 +184,7 @@ class _MyContributionsState extends State<MyContributions> {
                     body: SafeArea(
                         child: mydata.isEmpty && myNotesData.isEmpty
                             ? nothingToShow(
-                            'You can also contribute in the StudyOverflow community by adding questions, your name will be reflected below the question you will add.',
+                            'You can also contribute in the Study Overflow community by adding questions or notes, your name will be displayed along the questions or notes you will upload.',
                             'assets/contribute.png')
                             : Column(
                           children: [
@@ -364,8 +364,7 @@ class _MyContributionsState extends State<MyContributions> {
                                                     icon: Icon(Icons.delete,
                                                       color: Colors.grey,),
                                                     onPressed: () async {
-                                                      bool result = await ConfirmationDialogue(
-                                                          context);
+                                                      bool result = await ConfirmationDialogue(context,'Delete','Delete This Question?');
                                                       if (result) {
                                                         await DatabaseServices()
                                                             .deleteQuestionsData(

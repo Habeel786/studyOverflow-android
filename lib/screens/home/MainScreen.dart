@@ -2,8 +2,10 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 import 'package:studyoverflow/screens/home/selectsubject.dart';
 import 'package:studyoverflow/drawerScreens/aboutDevScreen.dart';
+import 'package:studyoverflow/screens/notifications/showNotifications.dart';
 import 'package:studyoverflow/services/database.dart';
 import 'package:studyoverflow/drawerScreens/sendfeedback.dart';
 import 'package:studyoverflow/models/user.dart';
@@ -13,6 +15,7 @@ import 'package:studyoverflow/screens/home/home.dart';
 import 'package:studyoverflow/services/auth.dart';
 import 'package:studyoverflow/shared/constants.dart';
 import 'package:studyoverflow/shared/loading.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../wrapper.dart';
 class MainScreen extends StatefulWidget {
   @override
@@ -26,16 +29,15 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
-    print(user.uid);
     return StreamBuilder(
       stream:DatabaseServices(uid: user.uid).userData ,
       builder:(context,snapshot){
         if(snapshot.hasData){
           UserData userData = snapshot.data;
-          print(userData.semester);
           final tabs = [
             Home(),
-            SelectStrSem(),
+            ShowNotifications(),
+            //SelectStrSem(),
 //            Description(course: '',
 //            keys: '',
 //            semester: '',
@@ -81,8 +83,8 @@ class _MainScreenState extends State<MainScreen> {
                   textAlign: TextAlign.center,
                 ),
                 BottomNavyBarItem(
-                  icon: Icon(Icons.add_box),
-                  title: Text('Ask'),
+                  icon: Icon(Icons.notification_important),
+                  title: Text('Notifications'),
                   activeColor: Colors.purpleAccent,
                   textAlign: TextAlign.center,
                 ),
@@ -166,7 +168,9 @@ class _MainScreenState extends State<MainScreen> {
                             SizedBox(height: 20,),
                             ListTile(
                               onTap: (){
-                                debugPrint("Tapped Profile");
+                                Share.share(
+                                    "Study Overflow contains latest Questions and Notes, you can also share yours by uploading them, download now "
+                                        'https://play.google.com/store/apps/details?id=com.habeel.studyoverflow');
                               },
                               leading: Icon(Icons.share,color: Colors.grey,),
                               title: Text(
@@ -178,7 +182,8 @@ class _MainScreenState extends State<MainScreen> {
                               height: 5,
                             ),
                             ListTile(
-                              onTap: () {
+                              onTap: ()async {
+                                await launch('https://play.google.com/store/apps/details?id=com.habeel.studyoverflow');
                               },
                               leading: Icon(Icons.star_border,color: Colors.grey,),
                               title: Text("Rate This App",style: TextStyle(color: Colors.grey)),
@@ -202,13 +207,14 @@ class _MainScreenState extends State<MainScreen> {
                                 Navigator.pop(context);
                                 showAboutDialog(
                                   context: context,
-                                  applicationVersion: '1.0.0',
+                                  applicationVersion: '1.0.2',
                                   applicationLegalese: TandC,
-                                  applicationName: 'StudyOverflow',
+                                  applicationName: 'Study Overflow',
                                 );
                               },
                               leading: Icon(Icons.receipt,color: Colors.grey,),
-                              title: Text("Terms And Condition",style: TextStyle(color: Colors.grey)),
+                              title: Text("Terms And Condition",style: TextStyle(color: Colors.grey)
+                              ),
                             ),
                             SizedBox(
                               height: 5,
@@ -226,8 +232,13 @@ class _MainScreenState extends State<MainScreen> {
                             ),
                             ListTile(
                               onTap: () async{
-                                AuthService().signOut();
-                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Wrapper()));
+                                bool isLogout=await ConfirmationDialogue(context,'Logout','Logout From Study Overflow?');
+                                if(isLogout){
+                                  AuthService().signOut();
+                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Wrapper()));
+                                }else{
+                                  Navigator.of(context).pop();
+                                }
                               },
                               leading: Icon(Icons.exit_to_app,color: Colors.grey,),
                               title: Text("Log Out",style: TextStyle(color: Colors.grey),),

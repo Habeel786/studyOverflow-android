@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -124,8 +123,7 @@ class _NotesTileState extends State<NotesTile> {
                                       InkWell(
                                           onTap: () async {
                                             bool result =
-                                                await ConfirmationDialogue(
-                                                    context);
+                                                await ConfirmationDialogue(context,'Delete','Delete This Notes?');
                                             if (result) {
                                               await DatabaseServices()
                                                   .deleteNotesData(
@@ -156,6 +154,7 @@ class _NotesTileState extends State<NotesTile> {
                                         count: widget.like,
                                         databaseReference: databaseReference,
                                         isClicked: isClicked,
+                                        iconColor: Colors.black54,
                                       ),
                                       Container(
                                         width: 60,

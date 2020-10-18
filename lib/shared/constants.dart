@@ -68,7 +68,7 @@ Widget AppIcon(){
   );
 }
 
-Future<bool> ConfirmationDialogue(context) async {
+Future<bool> ConfirmationDialogue(context,String title,String content) async {
   bool isConfirm = false;
   await showDialog(
       context: context,
@@ -76,9 +76,9 @@ Future<bool> ConfirmationDialogue(context) async {
       builder: (BuildContext context) {
         return AlertDialog(
           backgroundColor: Color(0xFF2d3447),
-          title: Text('Delete?', style: TextStyle(color: Colors.grey),),
+          title: Text(title, style: TextStyle(color: Colors.grey),),
           content: Text(
-              'Delete this item?', style: TextStyle(color: Colors.grey)),
+              content, style: TextStyle(color: Colors.grey)),
           actions: [
             FlatButton(onPressed: () {
               isConfirm = false;
@@ -100,7 +100,7 @@ Widget tandCText(context) {
     text: TextSpan(
         children: [
           TextSpan(
-              text: "By continuing, you agree to studyOverflow's ",
+              text: "By continuing, you agree to study Overflow's ",
               style: TextStyle(
                   color: Colors.grey[600]
               )

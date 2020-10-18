@@ -118,7 +118,6 @@ class _AddQuestionState extends State<AddQuestion> {
                                         setState(() {
                                           menuItems.remove(menuItems[index]);
                                         });
-                                        print("Delete Call at: " + menuItems[index].toString());
                                       },
                                     )
                                   ],
@@ -330,8 +329,6 @@ class _AddQuestionState extends State<AddQuestion> {
                                     widget.ukey,
                                     widget.udiagramId ?? diagramID
                                 );
-                                print('result:${result}');
-                                print("Data entered successfully");
                                 if (result != null) {
                                   setState(() {
                                     loading = false;

@@ -30,10 +30,10 @@ class _AboutDevState extends State<AboutDev> {
                   style: textstyle.apply(color: Colors.grey)
                 ),
                 SizedBox(height: 20,),
-                Text('Originally developed for backbenchers carrying inside a spark to study '
+                Text('Study Overflow is developed for backbenchers carrying inside a spark to study '
                     'apart from their "out of the box thoughts" but the '
-                    'lack of resources suppresses that spark. well said necessity is the mother of invention '
-                    'hence coming up with an idea of widest collection of Questions to fullfill that need',
+                    'lack of resources suppresses that spark.'
+                    'hence coming up with an idea of widest collection of Questions and Notes.',
                   style: TextStyle(color: Colors.grey),
 
                 ),

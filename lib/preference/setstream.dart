@@ -10,7 +10,6 @@ import 'package:studyoverflow/models/user.dart';
 import 'package:studyoverflow/services/database.dart';
 import 'package:studyoverflow/services/imageuploadservice.dart';
 import 'package:studyoverflow/shared/constants.dart';
-import 'package:studyoverflow/shared/dialogs.dart';
 import 'package:studyoverflow/shared/loading.dart';
 import 'package:studyoverflow/widgets/gradientbutton.dart';
 class SetStream extends StatefulWidget {
@@ -131,12 +130,10 @@ class _SetStreamState extends State<SetStream> {
                                                                   Navigator.pop(
                                                                       context);
                                                                   try {
-                                                                    bool delete = await DialogBox(
+                                                                    bool delete = await ConfirmationDialogue(
                                                                         context,
                                                                         'Delete',
                                                                         'Delete Profile Picture?');
-                                                                    print(
-                                                                        "delete =$delete");
                                                                     setState(() {
                                                                       profilepic =
                                                                       null;
@@ -177,11 +174,7 @@ class _SetStreamState extends State<SetStream> {
                                                                           context);
                                                                     }
                                                                   } catch (e) {
-                                                                    Fluttertoast
-                                                                        .showToast(
-                                                                      msg: 'Profile picture doesnt exists',
-                                                                      toastLength: Toast
-                                                                          .LENGTH_SHORT,);
+
                                                                   }
                                                                 }
                                                             ),
@@ -468,19 +461,14 @@ class _SetStreamState extends State<SetStream> {
                                           Fluttertoast.showToast(
                                             msg: 'Profile picture updated',
                                             toastLength: Toast.LENGTH_SHORT,);
-                                          print(
-                                              'sucessfully uploaded profile pic');
                                         } else {
                                           Fluttertoast.showToast(
                                             msg: 'Error!',
                                             toastLength: Toast.LENGTH_SHORT,);
-                                          print('unsucessfull');
                                         }
                                         return;
                                       }
                                       if (_formkey.currentState.validate()) {
-                                        print(_currentSemester);
-                                        print(_currentStream);
                                         await DatabaseServices(uid: user.uid)
                                             .updateUserData(
                                           _currentSemester ?? userData.semester,

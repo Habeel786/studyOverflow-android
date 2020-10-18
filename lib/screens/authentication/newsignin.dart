@@ -21,6 +21,7 @@ class _NewSigninState extends State<NewSignin> {
   String password= "";
   String error="";
   bool loading= false;
+  bool passwordVisible = false;
   @override
   Widget build(BuildContext context) {
     return loading?Loading():Scaffold(
@@ -123,7 +124,7 @@ class _NewSigninState extends State<NewSignin> {
                                       padding: EdgeInsets.all(10),
                                       child: TextFormField(
                                         style: TextStyle(color: Colors.grey),
-                                        obscureText: true,
+                                        obscureText: !passwordVisible,
                                         onChanged: (val) {
                                           setState(() {
                                             password = val;
@@ -135,6 +136,17 @@ class _NewSigninState extends State<NewSignin> {
                                             ? "Password Must Be 6 Chars Long"
                                             : null,
                                         decoration: InputDecoration(
+                                            suffixIcon: GestureDetector(
+                                              onTap: (){
+                                                setState(() {
+                                                  passwordVisible=!passwordVisible;
+                                                });
+                                              },
+                                              child:Icon(
+                                                Icons.visibility_off,
+                                                color: passwordVisible?Colors.blue:Colors.grey,
+                                              ),
+                                            ),
                                             labelText: "Password",
                                             labelStyle: TextStyle(
                                                 color: Colors.grey),
@@ -182,7 +194,6 @@ class _NewSigninState extends State<NewSignin> {
                                                   msg: 'Failed To SignIn',
                                                   toastLength: Toast
                                                       .LENGTH_SHORT,);
-                                                //print(_auth.error);
                                               });
                                             }
                                           }

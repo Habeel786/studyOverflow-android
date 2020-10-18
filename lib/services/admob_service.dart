@@ -1,9 +1,8 @@
 import 'dart:io';
-
+import 'package:studyoverflow/screens/allQuestions/description.dart';
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 
-import 'file:///C:/Users/Smart%20computer/AndroidStudioProjects/studyoverflow/lib/screens/allQuestions/description.dart';
 class AdmobService{
   String getAdMobAppID(){
     if(Platform.isAndroid){

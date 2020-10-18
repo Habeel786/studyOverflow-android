@@ -70,7 +70,6 @@ class _AddNotesState extends State<AddNotes> {
       if (snapshot.error == null) {
         storageTaskSnapshot = snapshot;
         String downloadUrl = await storageTaskSnapshot.ref.getDownloadURL();
-        print('upload success');
         setState(() {
           widget.uNotesURL = null;
           notesURL = downloadUrl;

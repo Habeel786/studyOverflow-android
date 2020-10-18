@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,7 +15,6 @@ class UploadImage{
 
   Future<dynamic> uploadImage(String imageName, File imagefile,
       String path) async {
-    print('image upload in process');
     final StorageReference strref = FirebaseStorage.instance.ref().child(
         path + imageName);
     final StorageUploadTask task = strref.putFile(imagefile);
@@ -25,8 +23,6 @@ class UploadImage{
     if(snapshot.error==null){
       storageTaskSnapshot = snapshot;
       String downloadUrl =await storageTaskSnapshot.ref.getDownloadURL();
-      print('upload success');
-      print(downloadUrl);
       return downloadUrl;
     }else{
       return null;

@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:studyoverflow/models/user.dart';
-
-import 'file:///C:/Users/Smart%20computer/AndroidStudioProjects/studyoverflow/lib/services/database.dart';
+import 'package:studyoverflow/services/database.dart';
 class AuthService{
 final FirebaseAuth _auth =FirebaseAuth.instance;
 String error="";
@@ -16,10 +15,8 @@ try{
       await DatabaseServices(uid: user.uid).updateUserData(
           semester, name, stream, '');
       dynamic extractedUser =_userFromFirebaseUser(user);
-      //print(user);
       return extractedUser;
 }catch(e){
-  print(e);
   error=e.toString();
   return null;
 }

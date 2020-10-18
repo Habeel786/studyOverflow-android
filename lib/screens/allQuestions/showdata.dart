@@ -79,7 +79,6 @@ class _QuestionListState extends State<QuestionList> {
                 }
                 );
                 tempdata.isEmpty ? notFound = true : notFound = false;
-                print(tempdata);
               }
               if (tempdata.isEmpty) {
                 filteredMydata = mydata;
@@ -164,17 +163,18 @@ class _QuestionListState extends State<QuestionList> {
                                 'assets/posterImage.png'), fit: BoxFit.cover,)
                         ),
                       ),
-                    ),
-                  ),
+                     ),
+                   ),
 
-                  SliverList(
+                    SliverList(
                     delegate: SliverChildBuilderDelegate((context, index) {
-                      if ((index + 1) % 11 == 0) {
+                      if ((index + 1) % 6 == 0) {
                         adFlag = true;
                       } else {
                         adFlag = false;
                       }
-                      return adFlag ? AdmobService().listtileWithAd(
+                      return
+                      adFlag ? AdmobService().listtileWithAd(
                         index,
                         context,
                         filteredMydata[index].answer,

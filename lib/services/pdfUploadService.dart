@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:firebase_storage/firebase_storage.dart';
 
 class UploadPDF {
@@ -15,8 +14,6 @@ class UploadPDF {
     if (snapshot.error == null) {
       storageTaskSnapshot = snapshot;
       String downloadUrl = await storageTaskSnapshot.ref.getDownloadURL();
-      print('upload success');
-      print(downloadUrl);
     }
   }
 }
