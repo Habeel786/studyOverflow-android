@@ -168,46 +168,24 @@ class _QuestionListState extends State<QuestionList> {
 
                     SliverList(
                     delegate: SliverChildBuilderDelegate((context, index) {
-                      if ((index + 1) % 6 == 0) {
-                        adFlag = true;
-                      } else {
-                        adFlag = false;
-                      }
-                      return
-                      adFlag ? AdmobService().listtileWithAd(
-                        index,
-                        context,
-                        filteredMydata[index].answer,
-                        filteredMydata[index].question,
-                        filteredMydata[index].chapter,
-                        filteredMydata[index].diagram,
-                        filteredMydata[index].yearofrepeat,
-                        filteredMydata[index].marks,
-                        filteredMydata[index].postedBy,
-                        filteredMydata[index].postedOn,
-                        filteredMydata[index].like,
-                        filteredMydata[index].dislike,
-                        filteredMydata[index].semester,
-                        filteredMydata[index].key,
-                        filteredMydata[index].course,
-                      ) :
-                      AdmobService().listtileWithoutAd(
-                        index,
-                        context,
-                        filteredMydata[index].answer,
-                        filteredMydata[index].question,
-                        filteredMydata[index].chapter,
-                        filteredMydata[index].diagram,
-                        filteredMydata[index].yearofrepeat,
-                        filteredMydata[index].marks,
-                        filteredMydata[index].postedBy,
-                        filteredMydata[index].postedOn,
-                        filteredMydata[index].like,
-                        filteredMydata[index].dislike,
-                        filteredMydata[index].semester,
-                        filteredMydata[index].key,
-                        filteredMydata[index].course,
-                      );
+                      return AdmobService().listtileWithoutAd(
+                          index,
+                          context,
+                          filteredMydata[index].answer,
+                          filteredMydata[index].question,
+                          filteredMydata[index].chapter,
+                          filteredMydata[index].diagram,
+                          filteredMydata[index].yearofrepeat,
+                          filteredMydata[index].marks,
+                          filteredMydata[index].postedBy,
+                          filteredMydata[index].postedOn,
+                          filteredMydata[index].like,
+                          filteredMydata[index].dislike,
+                          filteredMydata[index].semester,
+                          filteredMydata[index].key,
+                          filteredMydata[index].course,
+                        );
+
                     },
                       childCount: tempdata.isEmpty
                           ? mydata.length

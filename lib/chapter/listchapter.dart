@@ -1,5 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:studyoverflow/models/samplepprmodel.dart';
 import 'package:studyoverflow/screens/allQuestions/showdata.dart';
 import 'dart:ui' as ui;
 import 'package:studyoverflow/services/database.dart';
@@ -7,6 +9,7 @@ import 'package:studyoverflow/models/descmodel.dart';
 import 'package:studyoverflow/shared/constants.dart';
 import 'package:studyoverflow/shared/loading.dart';
 import 'package:studyoverflow/shared/nodatascreen.dart';
+import 'package:studyoverflow/widgets/samplepapertile.dart';
 class ChapterList extends StatefulWidget {
   final String imageURL;
   final String stream;
@@ -24,6 +27,7 @@ class _ChapterListState extends State<ChapterList> {
 
   @override
   Widget build(BuildContext context) {
+    List<SamplePaperModel> mydata = List();
     int colorindex=0;
     return StreamBuilder(
       stream: DatabaseServices().getChapterNames(widget.subjectName),
@@ -33,22 +37,82 @@ class _ChapterListState extends State<ChapterList> {
           List names=chapterNames.chapternames;
           return Scaffold(
             body: names.isEmpty?nothingToShow("No data present",'assets/notfound.png'):
-            ListView.builder(
-              itemCount: names.length,
-              itemBuilder: (context, index) {
-                if(index%7==0){
-                  colorindex=0;
-                }else{
-                  colorindex++;
-                }
-                return ChapterTile(
-                  chapterName: names[index],
-                  subject: widget.subjectName,
-                  semester: widget.semester,
-                  stream: widget.stream,
-                  colors: gradientcolors[colorindex],
-                  imageURL: widget.imageURL,);
-              },
+            SafeArea(
+              child: Column(
+                children: [
+                  StreamBuilder(
+                    stream:  FirebaseDatabase.instance
+                    .reference()
+                    .child('samplepdfNode')
+                    .child(widget.stream)
+                    .orderByChild('Category')
+                    .equalTo(widget.stream + '-' + widget.semester + '-' + widget.subjectName)
+                    .onValue,
+                    builder: (context, AsyncSnapshot<Event> usnapshot) {
+                     if(usnapshot.hasData){
+                       mydata.clear();
+                       Map<dynamic, dynamic> map = usnapshot.data.snapshot.value ?? {};
+                       map.forEach((k, v) {
+                         mydata.add(new SamplePaperModel(
+                             keys: k,
+                             course: v['Category'].toString().split('-')[0] ?? '',
+                             notesID: v['NotesID'],
+                             notesURL: v['NotesURL'],
+                             semseter: v['Category'].toString().split('-')[1] ?? '',
+                             title: v['Title']));
+                       });
+                       return Visibility(
+                         visible: mydata.isNotEmpty,
+                         child: Container(
+                             height: MediaQuery
+                                 .of(context)
+                                 .size
+                                 .height * 0.2,
+                             child: ListView.builder(
+                                 itemCount: mydata.length,
+                                 scrollDirection: Axis.horizontal,
+                                 itemBuilder: (context, index) {
+                                   return SamplePaperTile(
+                                     title: mydata[index].title,
+                                     pdfID: mydata[index].notesID,
+                                     downloadURL: mydata[index].notesURL,
+                                   );
+                                 }
+                             )
+                         ),
+                       );
+                     }else{
+                       return Container(
+                         padding: EdgeInsets.all(10.0),
+                           height: 60,
+                           width: 60,
+                           child: CircularProgressIndicator()
+                       );
+                     }
+                    }
+                  ),
+                  SizedBox(height: 10.0,),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: names.length,
+                      itemBuilder: (context, index) {
+                        if(index%7==0){
+                          colorindex=0;
+                        }else{
+                          colorindex++;
+                        }
+                        return ChapterTile(
+                          chapterName: names[index],
+                          subject: widget.subjectName,
+                          semester: widget.semester,
+                          stream: widget.stream,
+                          colors: gradientcolors[colorindex],
+                          imageURL: widget.imageURL,);
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         }else{
@@ -74,7 +138,7 @@ class ChapterTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.symmetric(horizontal:5.0,vertical: 5.0),
       child: InkWell(
         onTap: () =>
             Navigator.push(context, MaterialPageRoute(builder: (context) =>
@@ -117,7 +181,7 @@ class ChapterTile extends StatelessWidget {
                 ),
               ],
             ),
-            height: 150,
+            height: 100,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               //color: _color,
@@ -167,8 +231,8 @@ class CustomCardShapePainter extends CustomPainter {
           size.width, size.height, size.width, size.height - radius)
       ..lineTo(size.width, radius)
       ..quadraticBezierTo(size.width, 0, size.width - radius, 0)
-      ..lineTo(size.width - 1.5 * radius, 0)
-      ..quadraticBezierTo(-radius, 2 * radius, 0, size.height)
+      ..lineTo(size.width - 2.0 * radius, 0)
+      ..quadraticBezierTo(-radius,  radius, 0, size.height)
       ..close();
 
     canvas.drawPath(path, paint);

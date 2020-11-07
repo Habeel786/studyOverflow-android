@@ -129,8 +129,9 @@ class _ShowNotesState extends State<ShowNotes> {
                                     course: mydata[index].course,
                                     semester: mydata[index].semseter,
                                     keys: mydata[index].keys,
-                                    downloadURL: mydata[index].notesURL,
+                                    notesURL: mydata[index].notesURL,
                                     isEdit: false,
+                                    notesID: mydata[index].notesID,
                                   );
                                 },
                                 childCount: mydata.length,

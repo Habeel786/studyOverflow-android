@@ -95,6 +95,16 @@ Future<bool> ConfirmationDialogue(context,String title,String content) async {
   return isConfirm;
 }
 
+Widget loaders(){
+  return Center(
+      child: Container(
+          height: 50,
+          width: 50,
+          child: CircularProgressIndicator()
+      )
+  );
+}
+
 Widget tandCText(context) {
   return RichText(
     text: TextSpan(

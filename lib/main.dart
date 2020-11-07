@@ -4,8 +4,11 @@ import 'package:studyoverflow/models/user.dart';
 import 'package:studyoverflow/screens/wrapper.dart';
 import 'package:studyoverflow/services/auth.dart';
 
+
 void main() async{
-  runApp(MyApp());
+  runApp(
+      MyApp()
+  );
 }
 
 class MyApp extends StatelessWidget {

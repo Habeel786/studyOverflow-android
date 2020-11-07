@@ -19,7 +19,6 @@ class NotesTile extends StatefulWidget {
   final String course;
   final String semester;
   final String keys;
-  final String downloadURL;
   bool isEdit;
   final String notesID;
   final String thumbnailID;
@@ -36,7 +35,6 @@ class NotesTile extends StatefulWidget {
       this.course,
       this.semester,
       this.keys,
-      this.downloadURL,
       this.isEdit,
       this.notesID,
       this.thumbnailID,
@@ -114,6 +112,8 @@ class _NotesTileState extends State<NotesTile> {
                                                           uSemester:
                                                               widget.semester,
                                                           keys: widget.keys,
+                                                          uDownloads: widget.downloads,
+                                                          uLikes: widget.like,
                                                         )));
                                           },
                                           child: Icon(
@@ -182,7 +182,8 @@ class _NotesTileState extends State<NotesTile> {
                                     course: widget.course,
                                     currentCount: widget.downloads,
                                     title: widget.title,
-                                    downloadURL: widget.downloadURL,
+                                    downloadURL: widget.notesURL,
+                                    pdfID: widget.notesID,
                                   ),
                                   Align(
                                     alignment: Alignment.centerLeft,

@@ -17,9 +17,6 @@ import 'package:studyoverflow/widgets/gradientbutton.dart';
 import 'package:studyoverflow/widgets/notesTile.dart';
 
 class MyContributions extends StatefulWidget {
-  final String finalStream;
-
-  MyContributions({this.finalStream});
 
   @override
   _MyContributionsState createState() => _MyContributionsState();
@@ -50,11 +47,12 @@ class _MyContributionsState extends State<MyContributions> {
   Widget build(BuildContext context) {
     List<NotesModel> myNotesData = List();
     final user = Provider.of<User>(context);
+    final userData = Provider.of<UserData>(context);
     return StreamBuilder(
       stream: FirebaseDatabase.instance
           .reference()
           .child('test')
-          .child(widget.finalStream)
+          .child(userData.stream)
           .orderByChild('PostedBy')
           .equalTo(user.uid).onValue,
       builder: (_ , AsyncSnapshot<Event> snapshot){
@@ -101,7 +99,7 @@ class _MyContributionsState extends State<MyContributions> {
               stream: FirebaseDatabase.instance
                   .reference()
                   .child('notesNode')
-                  .child(widget.finalStream)
+                  .child(userData.stream)
                   .orderByChild('PostedBy')
                   .equalTo(user.uid
               )
@@ -217,8 +215,6 @@ class _MyContributionsState extends State<MyContributions> {
                                             semester: myNotesData[index]
                                                 .semseter,
                                             keys: myNotesData[index].keys,
-                                            downloadURL: myNotesData[index]
-                                                .notesURL,
                                             isEdit: true,
                                             notesID: myNotesData[index].notesID,
                                             thumbnailID: myNotesData[index]
