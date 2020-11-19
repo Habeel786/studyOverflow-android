@@ -69,7 +69,7 @@ class _LikeState extends State<Like> {
                 },
                 child: Icon(
                   widget.icon,
-                  color: widget.isClicked ? Colors.blue : Colors.grey,
+                  color: widget.isClicked ? Colors.blue : Colors.black54,
                 ),
               ),
               Text(
@@ -94,7 +94,7 @@ class _LikeState extends State<Like> {
                 },
                 child: Icon(
                   widget.icon,
-                  color: widget.isClicked ? Colors.blue : widget.iconColor??Colors.grey,
+                  color: widget.isClicked ? Colors.blue : widget.iconColor??Colors.black54,
                 ),
               ),
               Text(

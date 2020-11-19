@@ -158,6 +158,7 @@ class _DescriptionState extends State<Description> {
                                       databaseReference: databaseReference,
                                       operation: 'Like',
                                       trigger: true,
+                                      iconColor: Colors.grey,
                                     ),
                                     SizedBox(width: 10,),
                                     Like(
@@ -169,6 +170,7 @@ class _DescriptionState extends State<Description> {
                                       databaseReference: databaseReference,
                                       operation: 'DisLike',
                                       trigger: false,
+                                      iconColor: Colors.grey,
                                     ),
                                     SizedBox(width: 20,),
                                   ],

@@ -6,7 +6,8 @@ class SamplePaperModel{
   final String notesID;
   final String keys;
   final String subject;
+  final int fileSize;
 
   SamplePaperModel({this.title, this.course, this.semseter, this.notesURL,
-      this.notesID, this.keys, this.subject});
+      this.notesID, this.keys, this.subject,this.fileSize});
 }

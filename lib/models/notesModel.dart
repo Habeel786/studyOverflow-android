@@ -12,6 +12,7 @@ class NotesModel {
   final int downloads;
   final String keys;
   final String subject;
+  final int fileSize;
 
   NotesModel(
       {this.title,
@@ -26,5 +27,6 @@ class NotesModel {
       this.like,
       this.downloads,
       this.keys,
-      this.subject});
+      this.subject,
+      this.fileSize});
 }

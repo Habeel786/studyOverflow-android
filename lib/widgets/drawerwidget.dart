@@ -98,17 +98,17 @@ class DrawerWidget extends StatelessWidget {
                 SizedBox(
                   height: 5,
                 ),
-                ListTile(
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.push(context,MaterialPageRoute(builder: (_)=>AboutDev()));
-                  },
-                  leading: Icon(Icons.info_outline,color: Colors.grey,),
-                  title: Text("About Developer And App",style: TextStyle(color: Colors.grey)),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
+//                ListTile(
+//                  onTap: () {
+//                    Navigator.pop(context);
+//                    Navigator.push(context,MaterialPageRoute(builder: (_)=>AboutDev()));
+//                  },
+//                  leading: Icon(Icons.info_outline,color: Colors.grey,),
+//                  title: Text("About Developer And App",style: TextStyle(color: Colors.grey)),
+//                ),
+//                SizedBox(
+//                  height: 5,
+//                ),
                 ListTile(
                   onTap: () {
                     Navigator.pop(context);

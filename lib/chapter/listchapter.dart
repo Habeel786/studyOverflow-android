@@ -1,5 +1,4 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:studyoverflow/models/samplepprmodel.dart';
 import 'package:studyoverflow/screens/allQuestions/showdata.dart';
@@ -9,7 +8,6 @@ import 'package:studyoverflow/models/descmodel.dart';
 import 'package:studyoverflow/shared/constants.dart';
 import 'package:studyoverflow/shared/loading.dart';
 import 'package:studyoverflow/shared/nodatascreen.dart';
-import 'package:studyoverflow/widgets/samplepapertile.dart';
 class ChapterList extends StatefulWidget {
   final String imageURL;
   final String stream;
@@ -37,82 +35,22 @@ class _ChapterListState extends State<ChapterList> {
           List names=chapterNames.chapternames;
           return Scaffold(
             body: names.isEmpty?nothingToShow("No data present",'assets/notfound.png'):
-            SafeArea(
-              child: Column(
-                children: [
-                  StreamBuilder(
-                    stream:  FirebaseDatabase.instance
-                    .reference()
-                    .child('samplepdfNode')
-                    .child(widget.stream)
-                    .orderByChild('Category')
-                    .equalTo(widget.stream + '-' + widget.semester + '-' + widget.subjectName)
-                    .onValue,
-                    builder: (context, AsyncSnapshot<Event> usnapshot) {
-                     if(usnapshot.hasData){
-                       mydata.clear();
-                       Map<dynamic, dynamic> map = usnapshot.data.snapshot.value ?? {};
-                       map.forEach((k, v) {
-                         mydata.add(new SamplePaperModel(
-                             keys: k,
-                             course: v['Category'].toString().split('-')[0] ?? '',
-                             notesID: v['NotesID'],
-                             notesURL: v['NotesURL'],
-                             semseter: v['Category'].toString().split('-')[1] ?? '',
-                             title: v['Title']));
-                       });
-                       return Visibility(
-                         visible: mydata.isNotEmpty,
-                         child: Container(
-                             height: MediaQuery
-                                 .of(context)
-                                 .size
-                                 .height * 0.2,
-                             child: ListView.builder(
-                                 itemCount: mydata.length,
-                                 scrollDirection: Axis.horizontal,
-                                 itemBuilder: (context, index) {
-                                   return SamplePaperTile(
-                                     title: mydata[index].title,
-                                     pdfID: mydata[index].notesID,
-                                     downloadURL: mydata[index].notesURL,
-                                   );
-                                 }
-                             )
-                         ),
-                       );
-                     }else{
-                       return Container(
-                         padding: EdgeInsets.all(10.0),
-                           height: 60,
-                           width: 60,
-                           child: CircularProgressIndicator()
-                       );
-                     }
-                    }
-                  ),
-                  SizedBox(height: 10.0,),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: names.length,
-                      itemBuilder: (context, index) {
-                        if(index%7==0){
-                          colorindex=0;
-                        }else{
-                          colorindex++;
-                        }
-                        return ChapterTile(
-                          chapterName: names[index],
-                          subject: widget.subjectName,
-                          semester: widget.semester,
-                          stream: widget.stream,
-                          colors: gradientcolors[colorindex],
-                          imageURL: widget.imageURL,);
-                      },
-                    ),
-                  ),
-                ],
-              ),
+            ListView.builder(
+              itemCount: names.length,
+              itemBuilder: (context, index) {
+                if(index%5==0){
+                  colorindex=0;
+                }else{
+                  colorindex++;
+                }
+                return ChapterTile(
+                  chapterName: names[index],
+                  subject: widget.subjectName,
+                  semester: widget.semester,
+                  stream: widget.stream,
+                  colors: gradientcolors[colorindex],
+                  imageURL: widget.imageURL,);
+              },
             ),
           );
         }else{
@@ -167,15 +105,13 @@ class ChapterTile extends StatelessWidget {
                         .of(context)
                         .size
                         .width * 0.6,
-                    child: Center(
-                      child: AutoSizeText(
-                        chapterName,
-                        style: TextStyle(
-                          fontSize: 25,
-                          color: Colors.white,
-                        ),
-                        maxLines: 3,
+                    child: AutoSizeText(
+                      chapterName,
+                      style: TextStyle(
+                        fontSize: 25,
+                        color: Colors.white,
                       ),
+                      maxLines: 3,
                     ),
                   ),
                 ),

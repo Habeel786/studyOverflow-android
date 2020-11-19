@@ -82,7 +82,7 @@ class DatabaseServices{
 
   Future addNotes(String title, String notesURL, String thumbnailURL,
       String subject, String key, String course, String semester,
-      String thumbnailID, String notesID, int like, int downloads) async {
+      String thumbnailID, String notesID, int like, int downloads, int size) async {
     return (key == null || key == '') ? notesNode.child(course).push().set({
       'Title': title,
       'PostedBy': uid,
@@ -94,6 +94,7 @@ class DatabaseServices{
       'PostedOn': DateTime.now().toString(),
       'Like': like,
       'Downloads': downloads,
+      'Size':size,
     }) : notesNode.child(course).child(key).update({
       'Title': title,
       'PostedBy': uid,
@@ -103,6 +104,7 @@ class DatabaseServices{
       'NotesURL': notesURL,
       'NotesID': notesID,
       'PostedOn': DateTime.now().toString(),
+      'Size':size,
     });
   }
 
@@ -281,6 +283,17 @@ Stream<SubjectThumbnail> getThumbnail(String stream, String semester){
   }
 
   //------------------------------get notifications-----------------------------------//
+
+  //--------------------------get subjects---------------------------------------------//
+
+  Stream<SubjectsModel> getSubjects(String stream){
+    return Firestore.instance.collection('subjectcollection').document(stream).snapshots().map(_subjects);
+  }
+  SubjectsModel _subjects(DocumentSnapshot snapshot){
+    return SubjectsModel(subjects:snapshot.data['subjects']);
+  }
+  //--------------------------get subjects---------------------------------------------//
+
 
 
 //------------------------------------------get stream names---------------------------------------//

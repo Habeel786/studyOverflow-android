@@ -1,146 +1,338 @@
-//import 'package:dio/dio.dart';
-//import 'dart:io' as io;
-//import 'package:flutter/material.dart';
-//import 'package:fluttertoast/fluttertoast.dart';
-//import 'package:path_provider/path_provider.dart';
-//import 'package:permission_handler/permission_handler.dart';
-//import 'package:studyoverflow/screens/notes/showpdf.dart';
+//import 'package:flutter/cupertino.dart';
+//import "package:flutter/material.dart";
+//import 'package:provider/provider.dart';
+//import 'package:studyoverflow/models/user.dart';
+//import 'package:studyoverflow/screens/home/tabbarview.dart';
+//import 'package:studyoverflow/shared/constants.dart';
+//import 'package:studyoverflow/shared/loading.dart';
 //
-//class SamplePaperTile extends StatefulWidget {
-//  final String title;
-//  final String pdfID;
-//  final String downloadURL;
-//  SamplePaperTile({this.title,this.pdfID,this.downloadURL});
-//
+//class Home extends StatefulWidget {
 //  @override
-//  _SamplePaperTileState createState() => _SamplePaperTileState();
+//  _HomeState createState() => _HomeState();
 //}
 //
-//class _SamplePaperTileState extends State<SamplePaperTile> {
-//  double progress=0.0;
-//  bool downloading = false;
+//class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
+//  //FSBStatus drawerStatus;
+//  Size aspectratio;
+//  var divider=1.0;
+//  var heightforsmalldevices=1.0;
+//  TabController tabController;
+//  int currentIndex = 0;
+//  bool loading=false;
+//  @override
+//  initState(){
+//    // TODO: implement initState
+//    tabController = TabController(vsync: this, length: 2);
+//    super.initState();
+//  }
+//
+//
+//  @override
+//  Widget build(BuildContext context) {
+//
+//    var height = MediaQuery
+//        .of(context)
+//        .size
+//        .height;
+//    var width = MediaQuery
+//        .of(context)
+//        .size
+//        .width;
+//    final userData=Provider.of<UserData>(context);
+//    bool isPortrait;
+//    if (MediaQuery
+//        .of(context)
+//        .orientation == Orientation.portrait) {
+//      isPortrait = true;
+//    } else {
+//      isPortrait = false;
+//    }
+//    return userData!=null?Scaffold(
+//        appBar: AppBar(
+//          title: Visibility(
+//              visible: !isPortrait,
+//              child: Row(
+//                mainAxisAlignment: MainAxisAlignment.center,
+//                children: [
+//                  AppIcon(),
+//                  SizedBox(
+//                    width: 5.0,
+//                  ),
+//                  Text(
+//                    'Study Overflow',
+//                    style: TextStyle(
+//                      fontSize: 17,
+//                      fontWeight: FontWeight.w500,
+//                      color: Colors.grey,
+//                      fontFamily: 'Montserrat',
+//                      letterSpacing: 1,
+//                    ),
+//                  ),
+//                ],
+//              )
+//          ),
+//          leading: IconButton(icon: Icon(Icons.menu),
+//              onPressed: () => Scaffold.of(context).openDrawer()),
+//          backgroundColor: Color(0xFF2d3447),
+//          elevation: 0.0,
+//        ),
+//        body: SingleChildScrollView(
+//          child: Padding(
+//            padding: const EdgeInsets.all(8.0),
+//            child: Column(
+//              children: [
+//                Visibility(
+//                  visible: isPortrait,
+//                  child: Container(
+//                    alignment: Alignment.centerLeft,
+//                    height: height * 0.15,
+//                    child: Text(
+//                      'Study Overflow',
+//                      style: TextStyle(
+//                        fontSize: 27,
+//                        fontWeight: FontWeight.w500,
+//                        color: Colors.grey,
+//                        fontFamily: 'Montserrat',
+//                        letterSpacing: 1,
+//                      ),
+//                    ),
+//                  ),
+//                ),
+//                Container(
+//                  height: height * 0.55,
+//                  width: width,
+//                  child: SubjectList(semester: userData.semester,
+//                    stream: userData.stream,),
+//                ),
+//              ],
+//            ),
+//          ),
+//        )
+//    ):Loading();
+//  }
+//}
+
+
+
+
+
+
+//import 'package:cached_network_image/cached_network_image.dart';
+//import 'package:flutter/cupertino.dart';
+//import 'package:flutter/material.dart';
+//import 'package:studyoverflow/chapter/listchapter.dart';
+//import 'package:studyoverflow/models/descmodel.dart';
+//import 'package:studyoverflow/screens/notes/showNotes.dart';
+//import 'package:studyoverflow/services/database.dart';
+//import 'package:studyoverflow/shared/constants.dart';
+//class SubjectList extends StatefulWidget {
+//  final String semester;
+//  final String stream;
+//  SubjectList({this.semester, this.stream});
+//
+//  @override
+//  _SubjectListState createState() => _SubjectListState();
+//}
+//
+//class _SubjectListState extends State<SubjectList> {
+//
 //  @override
 //  void initState() {
 //    // TODO: implement initState
 //    super.initState();
 //  }
+//
 //  @override
 //  Widget build(BuildContext context) {
+//    int colorindex = 0;
 //
-//    print(downloading);
-//    return WillPopScope(
-//      onWillPop: () {
-//        if(downloading){
-//          return showDialog<bool>(
-//            context: context,
-//            builder: (c) => AlertDialog(
-//              backgroundColor: Color(0xFF2d3447),
-//              title: Text(
-//                'Warning',
-//                style: TextStyle(
-//                    color: Colors.white
-//                ),
-//              ),
-//              content: Text(
-//                "Can't go back, downloading in progress.this happens just once",
-//                style: TextStyle(
-//                    color: Colors.white70
-//                ),
-//              ),
-//            ),
-//          );
-//        }else{
-//          Navigator.pop(context, true);
-//          return null;
-//        }
-//
-//      },
-//      child: Padding(
-//          padding: const EdgeInsets.symmetric(
-//              horizontal: 5.0),
-//          child: InkWell(
-//            onTap: () async {
-//              final status = await Permission.storage.request();
-//              if (status.isGranted) {
-//                setState(() {
-//                  downloading=true;
-//                });
-//                Dio dio= Dio();
-//                try{
-//                  var dir= await getExternalStorageDirectory();
-//                  String pdfPath="${dir.path}"+"/${widget.pdfID}.pdf";
-//                  bool doExists= await io.File(pdfPath).exists();
-//                  if(!doExists){
-//                    Fluttertoast.showToast(
-//                        msg: 'Downloading..', toastLength: Toast.LENGTH_SHORT);
-//                    await dio.download(
-//                        widget.downloadURL,
-//                        '${dir.path}/${widget.pdfID}.pdf',
-//                        onReceiveProgress: (rec,total){
-//                          setState(() {
-//                            progress= rec/total;
-//                          });
-//                        }
-//                    );
+//    return StreamBuilder(
+//        stream: DatabaseServices().getThumbnail(widget.stream, widget.semester),
+//        builder: (context, snapshot) {
+//          if (snapshot.hasData) {
+//            SubjectThumbnail subjectThumbnail = snapshot.data;
+//            List images = subjectThumbnail.thumbnail.values.toList();
+//            List names = subjectThumbnail.thumbnail.keys.toList();
+//            return Scaffold(
+//              resizeToAvoidBottomPadding: false,
+//              body: ListView.builder(
+//                itemCount: names.length, //widget.userData.length,
+//                scrollDirection: Axis.horizontal,
+//                itemBuilder: (context, index) {
+//                  if (index % 7 == 0) {
+//                    colorindex = 0;
+//                  } else {
+//                    colorindex++;
 //                  }
-//                  Navigator.push(context,
-//                      MaterialPageRoute(
-//                          builder: (context) =>
-//                              ShowPDF(
-//                                path: pdfPath,
-//                                name: widget.title,
-//                                pdfid: widget.pdfID,
-//                              )));
-//                }catch(e){
-//                  print(e);
-//                }
-//              } else {
-//                Fluttertoast.showToast(
-//                    msg: 'Perission denied', toastLength: Toast.LENGTH_SHORT);
-//              }
-//            },
-//            child: Container(
-//              alignment: Alignment.bottomLeft,
-//              padding: EdgeInsets.all(8.0),
-//              decoration: BoxDecoration(
-//                  gradient: LinearGradient(colors: [
-//                    Color(0xff4776E6),
-//                    Color(0xff8E54E9),
-//                  ]),
-//                  borderRadius: BorderRadius.circular(15.0)
+//                  return getSubjectCardPortrait(
+//                      images[index], names[index], index + 1,
+//                      widget.semester, widget.stream,
+//                      gradientcolors[colorindex]
+//                  );
+//                },
 //              ),
-//              width: 120,
-//              child: Stack(
-//                children: [
-//                  Align(
-//                    alignment: Alignment.bottomLeft,
-//                    child: Text(
-//                      widget.title,
+//            );
+//          } else {
+//            return Container();
+//          }
+//        }
+//    );
+//  }
+//
+//  getSubjectCardPortrait(String imgpath, String subname, int index,
+//      String semester, String stream, List colors) {
+//    bool isPortrait;
+//    var offsetWidth;
+//    var offsetContainerWidth;
+//    if (MediaQuery
+//        .of(context)
+//        .orientation == Orientation.portrait) {
+//      isPortrait = true;
+//      offsetWidth = 0.7;
+//      offsetContainerWidth = 0.3;
+//    } else {
+//      isPortrait = false;
+//      offsetWidth = 0.35;
+//      offsetContainerWidth = 0.15;
+//    }
+//    var height = MediaQuery
+//        .of(context)
+//        .size
+//        .height;
+//    var width = MediaQuery
+//        .of(context)
+//        .size
+//        .width;
+//
+//    var boxHeight = height * 0.55;
+//    var boxWidth = width * offsetWidth;
+//
+//    return Padding(
+//      padding: const EdgeInsets.only(right: 10),
+//      child: ClipRRect(
+//        borderRadius: BorderRadius.circular(20.0),
+//        child: Container(
+//          decoration: BoxDecoration(
+//              gradient: LinearGradient(
+//                colors: colors,
+//              ),
+//              boxShadow: [
+//                BoxShadow(
+//                    color: Colors.black12,
+//                    offset: Offset(3.0, 6.0),
+//                    blurRadius: 10.0)
+//              ]),
+//          width: width * offsetWidth,
+//
+//          child: Padding(
+//            padding: const EdgeInsets.all(10),
+//            child: Column(
+//              children: [
+//                Align(
+//                  alignment: Alignment.topRight,
+//                  child: Text(
+//                    index.toString(),
+//                    style: TextStyle(
+//                        fontSize: 17.0,
+//                        color: Colors.white
+//                    ),
+//                  ),
+//                ),
+//                Visibility(
+//                  visible: isPortrait,
+//                  child: SizedBox(
+//                    height: height * 0.02,
+//                  ),
+//                ),
+//                Container(
+//                    width: height * 0.24,
+//                    height: height * 0.24,
+//                    child: imgpath != null ? CachedNetworkImage(
+//                      imageUrl: imgpath,
+//                      fit: BoxFit.cover,
+//                      progressIndicatorBuilder: (context, url,
+//                          downloadProgress) =>
+//                          CircularProgressIndicator(
+//                              value: downloadProgress.progress),
+//                      errorWidget: (context, url, error) =>
+//                          Icon(Icons.error),
+//                    ) : Image(
+//                      image: AssetImage('assets/fancycolored.png'),
+//                      fit: BoxFit.cover,)
+//                ),
+//                Container(
+//                  alignment: Alignment.bottomLeft,
+//                  height: boxHeight * offsetContainerWidth,
+//                  child: Text(subname,
 //                      style: TextStyle(
 //                          color: Colors.white,
-//                          fontSize: 17.0
-//                      ),
+//                          fontSize: 25.0,
+//                          fontFamily: "SF-Pro-Text-Regular")),
+//                ),
+//                SizedBox(height: 8.0,),
+//                Row(
+//                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                  children: [
+//                    roundButton(
+//                          () {
+//                        Navigator.push(context, MaterialPageRoute(
+//                            builder: (context) =>
+//                                ChapterList(semester: semester,
+//                                  stream: stream,
+//                                  subjectName: subname,
+//                                  imageURL: imgpath,
+//                                )
+//                        )
+//                        );
+//                      },
+//                      'Get Questions',
+//                      Colors.blue,
 //                    ),
-//                  ),
-//                  Visibility(
-//                    visible: downloading,
-//                    child: Align(
-//                        alignment: Alignment.topLeft,
-//                        child: SizedBox(
-//                            height: 30.0,
-//                            width: 30.0,
-//                            child: CircularProgressIndicator(
-//                              backgroundColor: Colors.grey,
-//                              valueColor:new AlwaysStoppedAnimation<Color>(Colors.red),
-//                              value: progress,
-//                            ))
-//                    ),
-//                  ),
-//                ],
-//              ),
+//
+//                    roundButton(
+//                          () {
+//                        Navigator.push(context, MaterialPageRoute(
+//                            builder: (context) =>
+//                                ShowNotes(
+//                                  stream: stream,
+//                                  semester: semester,
+//                                  subject: subname,
+//                                  image: imgpath,
+//                                )
+//                        )
+//                        );
+//                      },
+//                      'Get Notes',
+//                      Colors.purple,
+//
+//                    )
+//                  ],
+//                ),
+//              ],
 //            ),
-//          )
+//          ),
+//        ),
+//      ),
+//    );
+//  }
+//
+//
+//  Widget roundButton(Function onTap, String text, Color color) {
+//    return GestureDetector(
+//      onTap: onTap,
+//      child: Container(
+//        padding: EdgeInsets.symmetric(
+//            horizontal: 10.0, vertical: 6.0),
+//        decoration: BoxDecoration(
+//            color: color,
+//            borderRadius: BorderRadius.circular(
+//                20.0)),
+//        child: Text(text,
+//            style: TextStyle(
+//              color: Colors.white,
+//            )),
 //      ),
 //    );
 //  }
 //}
+

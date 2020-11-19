@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:studyoverflow/models/descmodel.dart';
+import 'package:studyoverflow/models/notificationModel.dart';
 import 'package:studyoverflow/models/user.dart';
 import 'package:studyoverflow/services/database.dart';
 import 'package:studyoverflow/services/imageuploadservice.dart';
@@ -22,10 +23,11 @@ class AddQuestion extends StatefulWidget {
   String uchapter;
   String udiagram;
   String udiagramId;
+  String usemester;
   int ulike;
   int udisLike;
     AddQuestion({this.uyearOfrepeat, this.uquestion, this.uanswer, this.usubject,
-      this.umarks, this.uchapter, this.udiagram, this.udisLike, this.ulike, this.ukey, this.udiagramId});
+      this.umarks, this.uchapter, this.udiagram, this.udisLike, this.ulike, this.ukey, this.udiagramId,this.usemester});
 
   @override
   _AddQuestionState createState() => _AddQuestionState();
@@ -38,9 +40,7 @@ class _AddQuestionState extends State<AddQuestion> {
   final _formkey = GlobalKey<FormState>();
   var menuItems = [2014, 2015, 2016, 2017, 2018, 2019,2020,2021];
   String _yearOfRepeat;
-  final List<String> semesters = ['1','2','3','4','5','6','7','8'];
   final List<String> marks = ['1','2','3','4','5','6','7','8'];
-  final List<String> courses = ['computer engineering','BSC','commerce','electronics engineering','civil engineering','electrical engineering'];
   bool loading= false;
   bool removeDiagram = false;
   String isSuccessfull="";
@@ -164,11 +164,13 @@ class _AddQuestionState extends State<AddQuestion> {
                           ),
                           SizedBox(height: 20,),
                            StreamBuilder(
-                              stream: DatabaseServices().getThumbnail(userData.stream,userData.semester),
-                              builder: (context, snapshot) {
+                               stream: DatabaseServices().getSubjects(userData.stream),
+                               builder: (context, snapshot) {
                                 if(snapshot.hasData){
-                                  SubjectThumbnail subjectThumbnail = snapshot.data;
-                                  List<dynamic> names=subjectThumbnail.thumbnail.keys.toList();
+                                  SubjectsModel allSubjects= snapshot.data;
+                                  List subjects = allSubjects.subjects;
+                                  Map sub = subjects[int.parse(widget.usemester??userData.semester)-1];
+                                  List names= sub.keys.toList();
                                   return DropdownButtonFormField(
                                     validator: (val)=>val.isEmpty?"Subject Empty": null,
                                     isExpanded: true,

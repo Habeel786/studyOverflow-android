@@ -9,9 +9,9 @@ class ShowPDF extends StatefulWidget {
   String path;
   String name;
   String pdfid;
+  int fileSize;
 
-
-  ShowPDF({this.path,this.name,this.pdfid});
+  ShowPDF({this.path,this.name,this.pdfid,this.fileSize});
 
   @override
   _ShowPDFState createState() => _ShowPDFState();
@@ -101,15 +101,16 @@ class _ShowPDFState extends State<ShowPDF> {
           Expanded(
             child:PdfView(
               onDocumentError: (e){
-                File file = File(widget.path);
-                file.delete();
+//                File file = File(widget.path);
+//                file.delete();
+              print(e);
               },
               scrollDirection: Axis.vertical,
               controller: pdfController,
               documentLoader:loaders(),
               pageLoader: loaders(),
               errorBuilder: (exception){
-                return Text(exception.toString());
+                return Center(child: Text(exception.toString()));
                },
               onDocumentLoaded: (document) {
                 setState(() {

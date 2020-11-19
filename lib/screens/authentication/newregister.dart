@@ -24,8 +24,8 @@ class _NewRegisterState extends State<NewRegister> {
   String name="";
   String _currentSemester;
   String _currentStream;
-  List streams=['computer engineering','civil engineering','mechanical engineering','electronics','electrical engineering'];
-  List semesters=['1','2','3','4','5','6'];
+  List streams=['computer engineering','civil engineering','mechanical engineering','electronics and telecommunication','electrical engineering'];
+  List semesters=['1','2','3','4','5','6','7','8'];
   String error="";
   bool loading= false;
   bool passwordVisible=false;

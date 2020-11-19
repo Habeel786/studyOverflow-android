@@ -18,7 +18,7 @@ class SetStream extends StatefulWidget {
 class _SetStreamState extends State<SetStream> {
 
   final _formkey = GlobalKey<FormState>();
-  List semesters=['1','2','3','4','5','6'];
+  List semesters=['1','2','3','4','5','6','7','8'];
   List streams=['computer engineering','civil engineering','mechanical engineering','electronics and telecommunication','electrical engineering'];
   String _currentStream;
   String _currentSemester;

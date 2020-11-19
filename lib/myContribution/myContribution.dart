@@ -125,6 +125,8 @@ class _MyContributionsState extends State<MyContributions> {
                       thumbnailURL: v['ThumbnailURL'],
                       title: v['Title'],
                       subject: v['Category'].toString().split('-')[2] ?? '',
+                      fileSize: v['Size']??0
+
                     )
                     );
                   });
@@ -222,6 +224,7 @@ class _MyContributionsState extends State<MyContributions> {
                                             notesURL: myNotesData[index]
                                                 .notesURL,
                                             subject: myNotesData[index].subject,
+                                            fileSize: myNotesData[index].fileSize,
                                           ),
                                         );
                                       }
@@ -353,7 +356,8 @@ class _MyContributionsState extends State<MyContributions> {
                                                                       ukey: filteredmydata[index]
                                                                           .key,
                                                                       udiagramId: mydata[index]
-                                                                          .diagramId
+                                                                          .diagramId,
+                                                                    usemester: mydata[index].semester,
                                                                   )));
                                                     }),
                                                 IconButton(
