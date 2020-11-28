@@ -14,11 +14,9 @@ try{
       FirebaseUser user =result.user;
       await DatabaseServices(uid: user.uid).updateUserData(
           semester, name, stream, '');
-      dynamic extractedUser =_userFromFirebaseUser(user);
-      return extractedUser;
+      return null;
 }catch(e){
-  error=e.toString();
-  return null;
+  return e.code;
 }
 }
 Future signInWithEmailAndPassword(String email, String password) async{
@@ -26,15 +24,9 @@ try{
       AuthResult result = await _auth.signInWithEmailAndPassword(email: email, password: password);
       FirebaseUser user =result.user;
      // print(user);
-      return user;
+      return null;
 }catch(e){
-  print(e);
-  String exp=e.toString();
-  errors=exp.split(",");
-  error=errors[1];
-  print(errors[1]);
-
-  return null;
+  return e.code;
 }
 }
 //Logout user

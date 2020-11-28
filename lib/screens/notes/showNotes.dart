@@ -1,3 +1,4 @@
+import 'package:facebook_audience_network/ad/ad_native.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:studyoverflow/models/notesModel.dart';
@@ -22,6 +23,10 @@ class ShowNotes extends StatefulWidget {
 
 class _ShowNotesState extends State<ShowNotes> {
   var _data;
+  Widget _currentAd = SizedBox(
+    height: 0,
+    width: 0,
+  );
   @override
   void initState() {
     // TODO: implement initState
@@ -33,6 +38,19 @@ class _ShowNotesState extends State<ShowNotes> {
         .orderByChild('Category')
         .equalTo(widget.stream + '-' + widget.semester + '-' + widget.subject)
         .onValue;
+    setState(() {
+      _currentAd= FacebookNativeAd(
+//        placementId: "IMG_16_9_APP_INSTALL#410376460331794_410964320273008",
+//        bannerSize: BannerSize.MEDIUM_RECTANGLE,
+        adType: NativeAdType.NATIVE_BANNER_AD,
+        bannerAdSize: NativeBannerAdSize.HEIGHT_50,
+        placementId: "410376460331794_411236640245776",
+        keepAlive: true,
+        listener: (result,value){
+          print('BannerAd$result-->$value');
+        },
+      );
+    });
   }
 
   @override
@@ -166,11 +184,15 @@ class _ShowNotesState extends State<ShowNotes> {
                           }
                       ),
                       SizedBox(height: 10.0,),
-
                       Container(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Container(
+                                height: 50,
+                                child: _currentAd
+                            ),
+                            SizedBox(height: 5.0,),
                             Text(
                               'Notes',
                               style: TextStyle(
@@ -192,7 +214,7 @@ class _ShowNotesState extends State<ShowNotes> {
                                 childAspectRatio: 110 / 150,
                               ),
                               itemBuilder: (BuildContext context, int index) {
-                                return NotesTile(
+                                return  NotesTile(
                                   title: mydata[index].title,
                                   postedBy: mydata[index].postedBy,
                                   postedOn: mydata[index].postedON,

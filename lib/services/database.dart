@@ -284,6 +284,16 @@ Stream<SubjectThumbnail> getThumbnail(String stream, String semester){
 
   //------------------------------get notifications-----------------------------------//
 
+  //-------------------------------get links----------------------------------------//
+  Stream<ImpLinksModel> getLinks(){
+    return Firestore.instance.collection('importantLinks').document('implinksDoc').snapshots().map(_impLinks);
+  }
+  ImpLinksModel _impLinks(DocumentSnapshot snapshot){
+    return ImpLinksModel(links:snapshot.data['implinks']);
+  }
+
+  //-------------------------------get links----------------------------------------//
+
   //--------------------------get subjects---------------------------------------------//
 
   Stream<SubjectsModel> getSubjects(String stream){

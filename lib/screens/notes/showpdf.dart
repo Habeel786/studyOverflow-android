@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:admob_flutter/admob_flutter.dart';
+import 'package:facebook_audience_network/ad/ad_banner.dart';
+import 'package:facebook_audience_network/facebook_audience_network.dart';
 import 'package:flutter/material.dart';
 import 'package:native_pdf_view/native_pdf_view.dart';
 import 'package:studyoverflow/shared/constants.dart';
@@ -26,17 +28,36 @@ class _ShowPDFState extends State<ShowPDF> {
   bool isSearching=false;
   var banner;
 
+  Widget _currentAd = SizedBox(
+    height: 0,
+    width: 0,
+  );
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+//    FacebookAudienceNetwork.init(
+//     // testingId: "37b1da9d-b48c-4103-a393-2e095e734bd6",
+//      //optional
+//    );
     pdfController = PdfController(
       document: PdfDocument.openFile(widget.path),
     );
-    Admob.initialize('ca-app-pub-9118153038397153~5910414684');
-    banner =  AdmobBanner(
-        adUnitId: "ca-app-pub-9118153038397153/4687179963",
-        adSize: AdmobBannerSize.FULL_BANNER);
+//    Admob.initialize('ca-app-pub-9118153038397153~5910414684');
+//    banner =  AdmobBanner(
+//        adUnitId: "ca-app-pub-9118153038397153/4687179963",
+//        adSize: AdmobBannerSize.FULL_BANNER);
+  setState(() {
+    _currentAd= FacebookBannerAd(
+      placementId: "410376460331794_410624736973633",
+      bannerSize: BannerSize.STANDARD,
+      listener: (result,value){
+        print('BannerAd$result-->$value');
+
+      },
+    );
+  }
+  );
   }
   @override
   Widget build(BuildContext context) {
@@ -124,9 +145,17 @@ class _ShowPDFState extends State<ShowPDF> {
               },
             )
           ),
+//          Flexible(
+//            child: Align(
+//              alignment: Alignment(0,1),
+//              child: _currentAd,
+//            ),
+//            fit: FlexFit.tight,
+//            flex: 2,
+//          )
           Align(
             alignment: Alignment.center,
-            child: banner,
+            child: _currentAd,
           ),
         ],
       ),

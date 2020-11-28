@@ -5,6 +5,7 @@ import 'package:share/share.dart';
 import 'package:studyoverflow/drawerScreens/aboutDevScreen.dart';
 import 'package:studyoverflow/drawerScreens/sendfeedback.dart';
 import 'package:studyoverflow/models/user.dart';
+import 'package:studyoverflow/screens/important_links/importantLinks.dart';
 import 'package:studyoverflow/screens/wrapper.dart';
 import 'package:studyoverflow/services/auth.dart';
 import 'package:studyoverflow/shared/constants.dart';
@@ -73,15 +74,29 @@ class DrawerWidget extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 20,),
+//                ListTile(
+//                  onTap: (){
+//                    Share.share(
+//                        "Study Overflow contains latest Questions and Notes, you can also share yours by uploading them, download now "
+//                            'https://play.google.com/store/apps/details?id=com.habeel.studyoverflow');
+//                  },
+//                  leading: Icon(Icons.share,color: Colors.grey,),
+//                  title: Text(
+//                      'Share App With Friends'
+//                      ,style: TextStyle(color: Colors.grey)
+//                  ),
+//                ),
+//                SizedBox(
+//                  height: 5,
+//                ),
                 ListTile(
-                  onTap: (){
-                    Share.share(
-                        "Study Overflow contains latest Questions and Notes, you can also share yours by uploading them, download now "
-                            'https://play.google.com/store/apps/details?id=com.habeel.studyoverflow');
+                  onTap: () async {
+                    Navigator.pop(context);
+                    Navigator.push(context,MaterialPageRoute(builder: (_)=>ImpLinks()));
                   },
-                  leading: Icon(Icons.share,color: Colors.grey,),
+                  leading: Icon(Icons.link,color: Colors.grey,),
                   title: Text(
-                      'Share App With Friends'
+                      'Important Links'
                       ,style: TextStyle(color: Colors.grey)
                   ),
                 ),
@@ -90,6 +105,8 @@ class DrawerWidget extends StatelessWidget {
                 ),
                 ListTile(
                   onTap: ()async {
+//                    final InAppReview _inAppReview = InAppReview.instance;
+//                    _inAppReview.requestReview();
                     await launch('https://play.google.com/store/apps/details?id=com.habeel.studyoverflow');
                   },
                   leading: Icon(Icons.star_border,color: Colors.grey,),

@@ -113,7 +113,7 @@ class _NewRegisterState extends State<NewRegister> {
                                             : null,
                                         onChanged: (val) {
                                           setState(() {
-                                            email = val;
+                                            email = val.trim();
                                           });
                                         },
                                         decoration: InputDecoration(
@@ -276,13 +276,13 @@ class _NewRegisterState extends State<NewRegister> {
                                                 email, password, name,
                                                 _currentSemester,
                                                 _currentStream);
-                                            if (results == null) {
+                                            if (results != null) {
                                               setState(() {
                                                 loading = false;
                                                 Fluttertoast.showToast(
-                                                  msg: 'Failed To Register',
+                                                  msg: results.toString().replaceAll('_', ' '),
                                                   toastLength: Toast
-                                                      .LENGTH_SHORT,);
+                                                      .LENGTH_LONG,);
                                               });
                                             }
                                           }

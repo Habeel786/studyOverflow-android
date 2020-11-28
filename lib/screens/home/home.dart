@@ -1,3 +1,5 @@
+import 'package:facebook_audience_network/ad/ad_banner.dart';
+import 'package:facebook_audience_network/ad/ad_native.dart';
 import 'package:flutter/cupertino.dart';
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
@@ -13,7 +15,7 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
+class _HomeState extends State<Home> with SingleTickerProviderStateMixin,AutomaticKeepAliveClientMixin {
   //FSBStatus drawerStatus;
   Size aspectratio;
   var divider=1.0;
@@ -21,11 +23,31 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   TabController tabController;
   int currentIndex = 0;
   bool loading=false;
+  Widget _currentAd = SizedBox(
+    height: 0,
+    width: 0,
+  );
+  @override
+  bool get wantKeepAlive => true;
   @override
   initState(){
     // TODO: implement initState
     tabController = TabController(vsync: this, length: 2);
+    setState(() {
+      _currentAd= FacebookBannerAd(
+//        placementId: "IMG_16_9_APP_INSTALL#410376460331794_410964320273008",
+//        bannerSize: BannerSize.MEDIUM_RECTANGLE,
+        placementId: "410376460331794_410624736973633",
+        bannerSize: BannerSize.STANDARD,
+        keepAlive: true,
+        listener: (result,value){
+          print('BannerAd$result-->$value');
+        },
+      );
+    }
+    );
     super.initState();
+
   }
 
 
@@ -71,14 +93,27 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               if(snapshot.hasData){
                 SubjectsModel allSubjects= snapshot.data;
                 List subjects = allSubjects.subjects;
-                return Container(
-                  height: height,
-                  child: ListView.builder(
-                    itemCount: subjects.length,
-                    itemBuilder: (context,index){
-                      return SubjectList(subjects: subjects[index],semester: (index+1).toString(),);
-                    },
-                  ),
+                return  ListView.builder(
+                 // physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true, // <- added
+                  primary: false,
+                  itemCount: subjects.length,
+                  itemBuilder: (context,index){
+                   if(index%2==0 || index==subjects.length){
+                     return SubjectList(subjects: subjects[index],semester: (index+1).toString(),);
+                   }else{
+                     return Column(
+                       children: [
+                         Container(
+                             width:double.infinity,
+                             child: SubjectList(subjects: subjects[index],semester: (index+1).toString(),)),
+                         SizedBox(height: 10.0,),
+                         _currentAd
+                       ],
+                     );
+
+                   }
+                  },
                 );
               }else{
                 return Container();
