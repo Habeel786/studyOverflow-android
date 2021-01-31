@@ -1,5 +1,4 @@
 import 'package:facebook_audience_network/ad/ad_banner.dart';
-import 'package:facebook_audience_network/ad/ad_native.dart';
 import 'package:flutter/cupertino.dart';
 import "package:flutter/material.dart";
 import 'package:provider/provider.dart';
@@ -61,30 +60,30 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin,Automat
     final userData=Provider.of<UserData>(context);
 
     return userData!=null?Scaffold(
-        appBar: AppBar(
-          title: Row(
-            children: [
-              AppIcon(),
-              SizedBox(
-                width: 5.0,
-              ),
-              Text(
-                'Study Overflow',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey,
-                  fontFamily: 'Montserrat',
-                  letterSpacing: 1,
-                ),
-              ),
-            ],
-          ),
-          leading: IconButton(icon: Icon(Icons.menu),
-              onPressed: () => Scaffold.of(context).openDrawer()),
-          backgroundColor: Color(0xFF2d3447),
-          elevation: 0.0,
-        ),
+        // appBar: AppBar(
+        //   title: Row(
+        //     children: [
+        //       AppIcon(),
+        //       SizedBox(
+        //         width: 5.0,
+        //       ),
+        //       Text(
+        //         'Study Overflow',
+        //         style: TextStyle(
+        //           fontSize: 20,
+        //           fontWeight: FontWeight.w500,
+        //           color: Colors.grey,
+        //           fontFamily: 'Montserrat',
+        //           letterSpacing: 1,
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        //   // leading: IconButton(icon: Icon(Icons.menu),
+        //   //     onPressed: () => Scaffold.of(context).openDrawer()),
+        //    backgroundColor: Color(0xFF2d3447),
+        //   elevation: 0.0,
+        // ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal:5.0),
           child: StreamBuilder(
@@ -93,27 +92,21 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin,Automat
               if(snapshot.hasData){
                 SubjectsModel allSubjects= snapshot.data;
                 List subjects = allSubjects.subjects;
-                return  ListView.builder(
-                 // physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true, // <- added
-                  primary: false,
-                  itemCount: subjects.length,
-                  itemBuilder: (context,index){
-                   if(index%2==0 || index==subjects.length){
-                     return SubjectList(subjects: subjects[index],semester: (index+1).toString(),);
-                   }else{
-                     return Column(
-                       children: [
-                         Container(
-                             width:double.infinity,
-                             child: SubjectList(subjects: subjects[index],semester: (index+1).toString(),)),
-                         SizedBox(height: 10.0,),
-                         _currentAd
-                       ],
-                     );
-
-                   }
-                  },
+                return  Column(
+                  children: [
+                    Expanded(
+                      child: ListView.builder(
+                       // physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true, // <- added
+                        primary: false,
+                        itemCount: subjects.length,
+                        itemBuilder: (context,index){
+                          return SubjectList(subjects: subjects[index],semester: (index+1).toString(),);
+                        },
+                      ),
+                    ),
+                    _currentAd,
+                  ],
                 );
               }else{
                 return Container();

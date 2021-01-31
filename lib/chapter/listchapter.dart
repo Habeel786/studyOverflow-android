@@ -85,7 +85,7 @@ class ChapterTile extends StatelessWidget {
                   stream: stream,
                   subject: subject,
                   chapter: chapterName,
-                  appBarColor: colors[1],
+                  appBarColor: colors,
                   imageURL: imageURL,
                 )
             )

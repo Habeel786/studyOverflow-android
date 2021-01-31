@@ -3,6 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:studyoverflow/models/user.dart';
 import 'package:studyoverflow/screens/wrapper.dart';
 import 'package:studyoverflow/services/auth.dart';
+import 'package:studyoverflow/services/database.dart';
+
+import 'models/descmodel.dart';
 
 
 void main() async{
@@ -15,8 +18,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<User>.value(
-      value: AuthService().user,
+    return MultiProvider(
+      providers: [
+        //StreamProvider<CheckUpdates>(create:(_)=>DatabaseServices().checkForUpdates()),
+        StreamProvider<User>(create: (_)=>AuthService().user,),
+      ],
       child: MaterialApp(
         theme: new ThemeData(
           primaryColor: Color(0XFFD76EF5),

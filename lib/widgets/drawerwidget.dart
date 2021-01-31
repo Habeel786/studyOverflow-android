@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
-import 'package:studyoverflow/drawerScreens/aboutDevScreen.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:studyoverflow/drawerScreens/sendfeedback.dart';
 import 'package:studyoverflow/models/user.dart';
 import 'package:studyoverflow/screens/important_links/importantLinks.dart';
@@ -74,21 +74,21 @@ class DrawerWidget extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 20,),
-//                ListTile(
-//                  onTap: (){
-//                    Share.share(
-//                        "Study Overflow contains latest Questions and Notes, you can also share yours by uploading them, download now "
-//                            'https://play.google.com/store/apps/details?id=com.habeel.studyoverflow');
-//                  },
-//                  leading: Icon(Icons.share,color: Colors.grey,),
-//                  title: Text(
-//                      'Share App With Friends'
-//                      ,style: TextStyle(color: Colors.grey)
-//                  ),
-//                ),
-//                SizedBox(
-//                  height: 5,
-//                ),
+                ListTile(
+                  onTap: (){
+                    Share.share(
+                        "Study Overflow contains latest Questions and Notes, you can also share yours by uploading them, download now "
+                            'https://play.google.com/store/apps/details?id=com.habeel.studyoverflow');
+                  },
+                  leading: Icon(Icons.share,color: Colors.grey,),
+                  title: Text(
+                      'Share App With Friends'
+                      ,style: TextStyle(color: Colors.grey)
+                  ),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
                 ListTile(
                   onTap: () async {
                     Navigator.pop(context);
@@ -105,9 +105,12 @@ class DrawerWidget extends StatelessWidget {
                 ),
                 ListTile(
                   onTap: ()async {
-//                    final InAppReview _inAppReview = InAppReview.instance;
-//                    _inAppReview.requestReview();
-                    await launch('https://play.google.com/store/apps/details?id=com.habeel.studyoverflow');
+                    final InAppReview inAppReview = InAppReview.instance;
+
+                    if (await inAppReview.isAvailable()) {
+                      inAppReview.requestReview();
+                    }
+
                   },
                   leading: Icon(Icons.star_border,color: Colors.grey,),
                   title: Text("Rate This App",style: TextStyle(color: Colors.grey)),

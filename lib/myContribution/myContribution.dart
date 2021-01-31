@@ -277,39 +277,39 @@ class _MyContributionsState extends State<MyContributions> {
                                         margin: EdgeInsets.fromLTRB(
                                             10, 6, 10, 0),
                                         child: ListTile(
-                                          onTap: () {
-                                            Navigator.push(context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        Description(
-                                                          answer: filteredmydata[index]
-                                                              .answer,
-                                                          question: filteredmydata[index]
-                                                              .question,
-                                                          chapter: filteredmydata[index]
-                                                              .chapter,
-                                                          diagram: filteredmydata[index]
-                                                              .diagram,
-                                                          yearofrepeat: filteredmydata[index]
-                                                              .yearofrepeat,
-                                                          marks: filteredmydata[index]
-                                                              .marks,
-                                                          postedBy: filteredmydata[index]
-                                                              .postedBy,
-                                                          postedOn: filteredmydata[index]
-                                                              .postedOn,
-                                                          like: filteredmydata[index]
-                                                              .like,
-                                                          dislike: filteredmydata[index]
-                                                              .dislike,
-                                                          semester: filteredmydata[index]
-                                                              .semester,
-                                                          keys: filteredmydata[index]
-                                                              .key,
-                                                          course: filteredmydata[index]
-                                                              .course,
-                                                        )));
-                                          },
+//                                          onTap: () {
+//                                            Navigator.push(context,
+//                                                MaterialPageRoute(
+//                                                    builder: (context) =>
+//                                                        Description(
+//                                                          answer: filteredmydata[index]
+//                                                              .answer,
+//                                                          question: filteredmydata[index]
+//                                                              .question,
+//                                                          chapter: filteredmydata[index]
+//                                                              .chapter,
+//                                                          diagram: filteredmydata[index]
+//                                                              .diagram,
+//                                                          yearofrepeat: filteredmydata[index]
+//                                                              .yearofrepeat,
+//                                                          marks: filteredmydata[index]
+//                                                              .marks,
+//                                                          postedBy: filteredmydata[index]
+//                                                              .postedBy,
+//                                                          postedOn: filteredmydata[index]
+//                                                              .postedOn,
+//                                                          like: filteredmydata[index]
+//                                                              .like,
+//                                                          dislike: filteredmydata[index]
+//                                                              .dislike,
+//                                                          semester: filteredmydata[index]
+//                                                              .semester,
+//                                                          keys: filteredmydata[index]
+//                                                              .key,
+//                                                          course: filteredmydata[index]
+//                                                              .course,
+//                                                        )));
+//                                          },
                                           title: Text(
                                             filteredmydata[index].question,
                                             style: TextStyle(

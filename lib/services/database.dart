@@ -252,11 +252,14 @@ class DatabaseServices{
 //---------------------------get user data------------------------------------//
 
   //-----------------------------------get thumbnail-----------------------------------//
-Stream<SubjectThumbnail> getThumbnail(String stream, String semester){
-  return Firestore.instance.collection('imagecollection').document(stream+'-'+semester).snapshots().map(_subjectThumbnail);
+Stream<CheckUpdates> checkForUpdates(){
+  return Firestore.instance.collection('alerts').document('notifications').snapshots().map(_checkForUpdates);
 }
-  SubjectThumbnail _subjectThumbnail(DocumentSnapshot snapshot){
-    return SubjectThumbnail(thumbnail:snapshot.data['subimg']);
+  CheckUpdates _checkForUpdates(DocumentSnapshot snapshot){
+    return CheckUpdates(
+        updates:snapshot.data['updates']??false,
+      version: snapshot.data['version']
+    );
   }
 
 //----------------------------------get thumbnails---------------------------------//
@@ -286,7 +289,7 @@ Stream<SubjectThumbnail> getThumbnail(String stream, String semester){
 
   //-------------------------------get links----------------------------------------//
   Stream<ImpLinksModel> getLinks(){
-    return Firestore.instance.collection('importantLinks').document('implinksDoc').snapshots().map(_impLinks);
+    return Firestore.instance.collection('alerts').document('notifications').snapshots().map(_impLinks);
   }
   ImpLinksModel _impLinks(DocumentSnapshot snapshot){
     return ImpLinksModel(links:snapshot.data['implinks']);

@@ -1,126 +1,39 @@
 import 'dart:io';
+import 'package:studyoverflow/models/descmodel.dart';
 import 'package:studyoverflow/screens/allQuestions/description.dart';
-import 'package:admob_flutter/admob_flutter.dart';
 import 'package:flutter/material.dart';
 
 class AdmobService{
-  String getAdMobAppID(){
-    if(Platform.isAndroid){
-      return 'ca-app-pub-9118153038397153~5910414684';
-    }
-  }
-  String getBannerAdID(){
-    if(Platform.isAndroid){
-      return 'ca-app-pub-9118153038397153/1410457549';
-    }
-  }
-  String shortAnswer(String answer) {
-    if (answer.length > 34) {
-      return answer.substring(0, 30) + "....";
+  String shortText(String answer,int length) {
+    if (answer.length > length) {
+      return answer.substring(0, length-4) + "....";
     } else {
       return answer;
     }
   }
-  Widget listtileWithAd(index,
-      BuildContext context,
-      answer,
-      question,
-      chapter,
-      diagram,
-      yearofrepeat,
-      marks,
-      postedby,
-      postedon,
-      like,
-      dislike,
-      semester,
-      keys,
-      course
-      ){
-    return Column(
-      children: [
-        Center(
-          child: AdmobBanner(
-              adUnitId: "ca-app-pub-9118153038397153/1410457549",
-              adSize: AdmobBannerSize.FULL_BANNER),
-        ),
-        Card(
-          color: Color(0xFF2d3447),
-          margin: EdgeInsets.fromLTRB(10,6,10,0),
-          child: ListTile(
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>Description(answer:answer,
-                question:question,chapter:chapter,diagram:diagram,
-                yearofrepeat:yearofrepeat,marks:marks,postedBy:postedby,
-                postedOn:postedon,like: like,dislike: dislike,semester:semester,
-                keys: keys,course: course,
-              )));
-            },
-            title: Text(question,style: TextStyle(color: Colors.white70),),
-            subtitle: Text(shortAnswer(answer
-                ??""),
-              style: TextStyle(color: Colors.grey),
-            ),
-            leading: Text((index+1).toString(),
-              style: TextStyle(color: Colors.grey),
-
-            ),
-            trailing: SizedBox(
-              width: 40,
-              child: Text(
-                yearofrepeat,
-                style: TextStyle(color: Colors.grey),
-              ),
-            )
-          ),
-        ),
-      ],
-    );
-  }
-  Widget listtileWithoutAd(index,
-      BuildContext context,
-      answer,
-      question,
-      chapter,
-      diagram,
-      yearofrepeat,
-      marks,
-      postedby,
-      postedon,
-      like,
-      dislike,
-      semester,
-      keys,
-      course
-      ){
+  Widget listtileWithoutAd(BuildContext context, NewData mydata,int index,List<Color> themeColor){
     return Card(
       color: Color(0xFF2d3447),
       margin: EdgeInsets.fromLTRB(10,6,10,0),
       child: ListTile(
         onTap: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>Description(answer:answer,
-            question:question,chapter:chapter,diagram:diagram,
-            yearofrepeat:yearofrepeat,marks:marks,postedBy:postedby,
-            postedOn:postedon,like: like,dislike: dislike,semester: semester,
-            keys: keys,course: course,
-          )));
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>Description(mydata: mydata,themeColor: themeColor,)));
         },
-        title: Text(question,style: TextStyle(color: Colors.white70),),
-        subtitle: Text(shortAnswer(answer
-            ??""),
+        title: Text(shortText(mydata.question,100),style: TextStyle(color: Colors.white70),),
+        subtitle: Text(shortText(mydata.answer[0]??"",34),
           style: TextStyle(color: Colors.grey),
         ),
         leading: Text((index+1).toString(),
           style: TextStyle(color: Colors.grey),
 
         ),
-        trailing: SizedBox(
-          width: 40,
-          child: Text(
-            yearofrepeat,
-            style: TextStyle(color: Colors.grey),
-          ),
-        )
+//        trailing: SizedBox(
+//          width: 40,
+//          child: Text(
+//            yearofrepeat,
+//            style: TextStyle(color: Colors.grey),
+//          ),
+//        )
       ),
     );
   }

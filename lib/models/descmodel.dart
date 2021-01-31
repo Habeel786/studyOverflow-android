@@ -20,9 +20,32 @@ class Data{
      this.like, this.dislike, this.diagramId
    });
 }
-class SubjectThumbnail{
-   final Map thumbnail;
-   SubjectThumbnail({this.thumbnail});
+class NewData{
+   String question;
+   List answer;
+   String course;
+   String semester;
+   String subject;
+   String chapter;
+   List diagram;
+   String thumbnail;
+   String marks;
+   String postedBy;
+   String postedOn;
+   int like;
+   int dislike;
+   String key;
+   List diagramId;
+
+   NewData({this.question, this.answer, this.course, this.semester, this.subject,
+      this.chapter,this.diagram,this.marks,this.thumbnail,this.postedBy,this.postedOn,
+      this.like,this.dislike,this.key,this.diagramId
+   });
+}
+class CheckUpdates{
+   final bool updates;
+   final String version;
+   CheckUpdates({this.updates,this.version});
 }
 
 class ChapterNames{

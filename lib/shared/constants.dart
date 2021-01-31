@@ -1,6 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:studyoverflow/drawerScreens/termsAndConditions.dart';
+
+const appVersion = '1.0.0+10';
 const textInputDecoration=InputDecoration(
   focusColor: Colors.pink,
   filled: true,

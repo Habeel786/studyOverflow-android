@@ -1,4 +1,3 @@
-import 'package:admob_flutter/admob_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,7 +14,7 @@ class QuestionList extends StatefulWidget {
   final String stream;
   final String chapter;
   final String imageURL;
-  final Color appBarColor;
+  final List<Color> appBarColor;
 
   QuestionList({this.subject, this.semester, this.stream, this.chapter,
     this.appBarColor, this.imageURL});
@@ -25,9 +24,9 @@ class QuestionList extends StatefulWidget {
 }
 
 class _QuestionListState extends State<QuestionList> {
-  List<Data> mydata=List();
-  List<Data> filteredMydata=[];
-  List<Data> tempdata=[];
+  List<NewData> mydata=List();
+  List<NewData> filteredMydata=[];
+  List<NewData> tempdata=[];
 
   bool isSearching=false;
   bool notFound=false;
@@ -37,8 +36,7 @@ class _QuestionListState extends State<QuestionList> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Admob.initialize('ca-app-pub-9118153038397153~5910414684');
-    _data= FirebaseDatabase.instance.reference().child('test').child(widget.stream)
+    _data= FirebaseDatabase.instance.reference().child('topics').child(widget.stream)
         .orderByChild('Category').equalTo(widget.stream+'-'+widget.semester+'-'+widget.subject
         +'-'+widget.chapter
     ).onValue;
@@ -53,22 +51,23 @@ class _QuestionListState extends State<QuestionList> {
               mydata.clear();
               Map<dynamic, dynamic> map = snapshot.data.snapshot.value ?? {};
               map.forEach((k, v) {
-                mydata.add(new Data(
+                mydata.add(new NewData(
                   key: k,
                   chapter: v['Category'].toString().split('-')[3] ?? '',
-                  answer: v['Answer'] ?? '',
+                  answer: v['Answer'] ?? [],
                   course: v['Category'].toString().split('-')[0] ?? '',
                   question: v['Question'] ?? '',
                   semester: v['Category'].toString().split('-')[1] ?? '',
                   subject: v['Category'].toString().split('-')[2] ?? '',
-                  diagram: v['Diagram'] ?? '',
-                  yearofrepeat: v['YearOfRepeat'] ?? '',
+                  diagram: v['Diagram'] ?? [],
+                  //yearofrepeat: v['YearOfRepeat'] ?? '',
                   marks: v['Marks'] ?? '',
                   thumbnail: v['Thumbnail'] ?? '',
                   postedBy: v['PostedBy'] ?? '',
                   postedOn: v['PostedOn'] ?? '',
                   dislike: v['DisLike'] ?? 0,
                   like: v['Like'] ?? 0,
+                  diagramId: v['DiagramID']??[]
                 ));
               });
               filterthedata(String value) {
@@ -88,21 +87,21 @@ class _QuestionListState extends State<QuestionList> {
               return mydata.isEmpty ? nothingToShow(
                   "Data is to be added", 'assets/notfound.png')
                   : CustomScrollView(
-                slivers: [
-                  SliverAppBar(
-                    shape: ContinuousRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(30),
-                          bottomRight: Radius.circular(30),
-                        )
-                    ),
-                    backgroundColor: widget.appBarColor,
-                    actions: [
-                      isSearching ? IconButton(
-                          icon: Icon(Icons.clear, color: Colors.white,),
-                          onPressed: () {
-                            setState(() {
-                              isSearching = false;
+                    slivers: [
+                      SliverAppBar(
+                        shape: ContinuousRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(30),
+                              bottomRight: Radius.circular(30),
+                            )
+                        ),
+                        backgroundColor: widget.appBarColor[1],
+                        actions: [
+                          isSearching ? IconButton(
+                              icon: Icon(Icons.clear, color: Colors.white,),
+                              onPressed: () {
+                                setState(() {
+                                  isSearching = false;
                             });
                           }) : IconButton(
                           icon: Icon(Icons.search, color: Colors.white,),
@@ -168,24 +167,7 @@ class _QuestionListState extends State<QuestionList> {
 
                     SliverList(
                     delegate: SliverChildBuilderDelegate((context, index) {
-                      return AdmobService().listtileWithoutAd(
-                          index,
-                          context,
-                          filteredMydata[index].answer,
-                          filteredMydata[index].question,
-                          filteredMydata[index].chapter,
-                          filteredMydata[index].diagram,
-                          filteredMydata[index].yearofrepeat,
-                          filteredMydata[index].marks,
-                          filteredMydata[index].postedBy,
-                          filteredMydata[index].postedOn,
-                          filteredMydata[index].like,
-                          filteredMydata[index].dislike,
-                          filteredMydata[index].semester,
-                          filteredMydata[index].key,
-                          filteredMydata[index].course,
-                        );
-
+                      return AdmobService().listtileWithoutAd(context, mydata[index],index,widget.appBarColor);
                     },
                       childCount: tempdata.isEmpty
                           ? mydata.length

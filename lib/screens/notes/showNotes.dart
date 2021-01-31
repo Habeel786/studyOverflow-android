@@ -23,10 +23,7 @@ class ShowNotes extends StatefulWidget {
 
 class _ShowNotesState extends State<ShowNotes> {
   var _data;
-  Widget _currentAd = SizedBox(
-    height: 0,
-    width: 0,
-  );
+
   @override
   void initState() {
     // TODO: implement initState
@@ -38,19 +35,6 @@ class _ShowNotesState extends State<ShowNotes> {
         .orderByChild('Category')
         .equalTo(widget.stream + '-' + widget.semester + '-' + widget.subject)
         .onValue;
-    setState(() {
-      _currentAd= FacebookNativeAd(
-//        placementId: "IMG_16_9_APP_INSTALL#410376460331794_410964320273008",
-//        bannerSize: BannerSize.MEDIUM_RECTANGLE,
-        adType: NativeAdType.NATIVE_BANNER_AD,
-        bannerAdSize: NativeBannerAdSize.HEIGHT_50,
-        placementId: "410376460331794_411236640245776",
-        keepAlive: true,
-        listener: (result,value){
-          print('BannerAd$result-->$value');
-        },
-      );
-    });
   }
 
   @override
@@ -188,11 +172,6 @@ class _ShowNotesState extends State<ShowNotes> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
-                                height: 50,
-                                child: _currentAd
-                            ),
-                            SizedBox(height: 5.0,),
                             Text(
                               'Notes',
                               style: TextStyle(
